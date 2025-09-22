@@ -1,0 +1,331 @@
+import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
+import { Badge } from '../ui/badge';
+import { Search, Filter, Plus, Eye, Edit, ArrowRight, Check, X, AlertCircle } from 'lucide-react';
+
+export function Mappings() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('all');
+
+  // Mock data for code mappings
+  const mappingsData = [
+    {
+      id: 'MAP-001',
+      namasteCode: 'NAM001',
+      namasteDescription: 'Anxiety disorder, generalized',
+      icd11Code: 'MG30.0',
+      icd11Description: 'Generalized anxiety disorder',
+      mappingType: 'Exact Match',
+      confidence: 95,
+      status: 'Approved',
+      reviewer: 'Dr. Smith',
+      dateCreated: '2024-09-15',
+      lastReviewed: '2024-09-20'
+    },
+    {
+      id: 'MAP-002',
+      namasteCode: 'NAM002',
+      namasteDescription: 'Hypertension, essential',
+      icd11Code: 'BA00',
+      icd11Description: 'Essential hypertension',
+      mappingType: 'Exact Match',
+      confidence: 98,
+      status: 'Approved',
+      reviewer: 'Dr. Johnson',
+      dateCreated: '2024-09-14',
+      lastReviewed: '2024-09-19'
+    },
+    {
+      id: 'MAP-003',
+      namasteCode: 'NAM003',
+      namasteDescription: 'Diabetes mellitus, type 2',
+      icd11Code: '5A11',
+      icd11Description: 'Type 2 diabetes mellitus',
+      mappingType: 'Close Match',
+      confidence: 87,
+      status: 'Under Review',
+      reviewer: 'Dr. Wilson',
+      dateCreated: '2024-09-13',
+      lastReviewed: '2024-09-18'
+    },
+    {
+      id: 'MAP-004',
+      namasteCode: 'NAM004',
+      namasteDescription: 'Chronic obstructive pulmonary disease',
+      icd11Code: 'CA22',
+      icd11Description: 'Chronic obstructive pulmonary disease',
+      mappingType: 'Exact Match',
+      confidence: 96,
+      status: 'Approved',
+      reviewer: 'Dr. Davis',
+      dateCreated: '2024-09-12',
+      lastReviewed: '2024-09-17'
+    },
+    {
+      id: 'MAP-005',
+      namasteCode: 'NAM005',
+      namasteDescription: 'Rheumatoid arthritis',
+      icd11Code: 'FA20.0',
+      icd11Description: 'Rheumatoid arthritis, unspecified',
+      mappingType: 'Partial Match',
+      confidence: 75,
+      status: 'Pending Review',
+      reviewer: null,
+      dateCreated: '2024-09-11',
+      lastReviewed: null
+    }
+  ];
+
+  const statuses = ['all', 'Approved', 'Under Review', 'Pending Review', 'Rejected'];
+
+  const filteredMappings = mappingsData.filter(mapping => {
+    const matchesSearch = mapping.namasteCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         mapping.icd11Code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         mapping.namasteDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         mapping.icd11Description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = selectedStatus === 'all' || mapping.status === selectedStatus;
+    return matchesSearch && matchesStatus;
+  });
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Approved': return 'bg-green-100 text-green-800';
+      case 'Under Review': return 'bg-yellow-100 text-yellow-800';
+      case 'Pending Review': return 'bg-blue-100 text-blue-800';
+      case 'Rejected': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getMappingTypeColor = (type: string) => {
+    switch (type) {
+      case 'Exact Match': return 'bg-green-100 text-green-800';
+      case 'Close Match': return 'bg-yellow-100 text-yellow-800';
+      case 'Partial Match': return 'bg-orange-100 text-orange-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getConfidenceColor = (confidence: number) => {
+    if (confidence >= 90) return 'text-green-600';
+    if (confidence >= 75) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground">Code Mappings</h1>
+          <p className="text-muted-foreground">
+            Manage mappings between Namaste codes and ICD-11/TM2 classifications
+          </p>
+        </div>
+        <Button className="flex items-center space-x-2">
+          <Plus className="w-4 h-4" />
+          <span>Create Mapping</span>
+        </Button>
+      </div>
+
+      {/* Search and Filters */}
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input
+                placeholder="Search mappings, codes, descriptions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+            <div className="flex space-x-2">
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="px-3 py-2 border border-border rounded-md bg-background text-foreground"
+              >
+                {statuses.map(status => (
+                  <option key={status} value={status}>
+                    {status === 'all' ? 'All Statuses' : status}
+                  </option>
+                ))}
+              </select>
+              <Button variant="outline" className="flex items-center space-x-2">
+                <Filter className="w-4 h-4" />
+                <span>More Filters</span>
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">Total Mappings</p>
+              <p className="text-2xl font-bold">6,234</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">Approved</p>
+              <p className="text-2xl font-bold text-green-600">5,123</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">Under Review</p>
+              <p className="text-2xl font-bold text-yellow-600">892</p>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">Avg. Confidence</p>
+              <p className="text-2xl font-bold text-blue-600">89%</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Mapping Quality Overview */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Mapping Quality Overview</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Exact Match</span>
+                <span className="text-sm font-medium">3,245 (52%)</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-green-600 h-2 rounded-full" style={{width: '52%'}}></div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Close Match</span>
+                <span className="text-sm font-medium">2,234 (36%)</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-yellow-600 h-2 rounded-full" style={{width: '36%'}}></div>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm">Partial Match</span>
+                <span className="text-sm font-medium">755 (12%)</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-orange-600 h-2 rounded-full" style={{width: '12%'}}></div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Mappings Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Code Mappings ({filteredMappings.length} results)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Namaste Code</TableHead>
+                  <TableHead>ICD-11 Code</TableHead>
+                  <TableHead>Mapping Type</TableHead>
+                  <TableHead>Confidence</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Reviewer</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredMappings.map((mapping) => (
+                  <TableRow key={mapping.id}>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="font-mono font-medium">{mapping.namasteCode}</div>
+                        <div className="text-sm text-muted-foreground max-w-xs truncate">
+                          {mapping.namasteDescription}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="font-mono font-medium">{mapping.icd11Code}</div>
+                        <div className="text-sm text-muted-foreground max-w-xs truncate">
+                          {mapping.icd11Description}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={getMappingTypeColor(mapping.mappingType)}>
+                        {mapping.mappingType}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center space-x-2">
+                        <span className={`font-medium ${getConfidenceColor(mapping.confidence)}`}>
+                          {mapping.confidence}%
+                        </span>
+                        {mapping.confidence >= 90 && <Check className="w-4 h-4 text-green-600" />}
+                        {mapping.confidence < 75 && <AlertCircle className="w-4 h-4 text-red-600" />}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge className={getStatusColor(mapping.status)}>
+                        {mapping.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {mapping.reviewer || 'Unassigned'}
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex space-x-2">
+                        <Button variant="ghost" size="sm">
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                        <Button variant="ghost" size="sm">
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        {mapping.status === 'Pending Review' && (
+                          <>
+                            <Button variant="ghost" size="sm" className="text-green-600">
+                              <Check className="w-4 h-4" />
+                            </Button>
+                            <Button variant="ghost" size="sm" className="text-red-600">
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
