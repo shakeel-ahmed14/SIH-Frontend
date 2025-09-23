@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
-import { 
-  Home, 
-  Code, 
-  Map, 
-  Users, 
-  Download, 
-  Shield, 
-  HelpCircle, 
+import {
+  Home,
+  Code,
+  Map,
+  Users,
+  Download,
+  Shield,
+  HelpCircle,
   Settings,
   Menu,
-  X 
+  X
 } from 'lucide-react';
 
 interface NavigationProps {
@@ -58,13 +58,15 @@ export function Navigation({ currentPage = 'home', onPageChange }: NavigationPro
               return (
                 <Button
                   key={item.id}
-                  variant={currentPage === item.id ? "default" : "ghost"}
+                  variant="ghost"
                   onClick={() => handleNavClick(item.id)}
-                  className="flex items-center space-x-2"
+                  className={`flex items-center space-x-2 
+                  ${currentPage === item.id ? "bg-zinc-700 text-white" : "hover:bg-zinc-300"}`}
                 >
                   <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
                 </Button>
+
               );
             })}
           </div>
