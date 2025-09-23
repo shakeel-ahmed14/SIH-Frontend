@@ -1,14 +1,13 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { 
-  Search, 
-  Map, 
-  FileSearch, 
+import React from "react";
+import {
+  Search,
+  Map,
+  FileSearch,
   Download,
   TrendingUp,
-  ArrowRight 
-} from 'lucide-react';
+  ArrowRight,
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface DashboardProps {
   onNavigate?: (page: string) => void;
@@ -16,79 +15,29 @@ interface DashboardProps {
 
 export function Dashboard({ onNavigate }: DashboardProps) {
   const stats = [
-    {
-      title: 'NAMASTE Codes',
-      value: '12,847',
-      change: '+127 this week',
-      trend: 'up'
-    },
-    {
-      title: 'TM2 Codes',
-      value: '8,652',
-      change: '+43 this week',
-      trend: 'up'
-    },
-    {
-      title: 'Active Mappings',
-      value: '6,234',
-      change: '+89 this week',
-      trend: 'up'
-    },
-    {
-      title: 'Patient Records',
-      value: '1,456',
-      change: '+12 today',
-      trend: 'up'
-    }
+    { title: "NAMASTE Codes", value: "12,847", change: "+127 this week", trend: "up" },
+    { title: "TM2 Codes", value: "8,652", change: "+43 this week", trend: "up" },
+    { title: "Active Mappings", value: "6,234", change: "+89 this week", trend: "up" },
+    { title: "Patient Records", value: "1,456", change: "+12 today", trend: "up" },
   ];
 
   const quickActions = [
-    {
-      title: 'Code Lookup',
-      description: 'Search and browse medical codes',
-      icon: Search,
-      iconColor: 'text-blue-600',
-      bgColor: 'bg-blue-50',
-      page: 'namaste-codes'
-    },
-    {
-      title: 'Mapping Explorer',
-      description: 'Explore code mappings between systems',
-      icon: Map,
-      iconColor: 'text-green-600',
-      bgColor: 'bg-green-50',
-      page: 'mappings'
-    },
-    {
-      title: 'Smart Search',
-      description: 'Unified search across all systems',
-      icon: FileSearch,
-      iconColor: 'text-orange-600',
-      bgColor: 'bg-orange-50',
-      page: 'namaste-codes'
-    },
-    {
-      title: 'Bulk Downloads',
-      description: 'Download FHIR data in bulk',
-      icon: Download,
-      iconColor: 'text-yellow-600',
-      bgColor: 'bg-yellow-50',
-      page: 'downloads'
-    }
+    { title: "Code Lookup", description: "Search and browse medical codes", icon: Search, iconColor: "text-red-600", bgColor: "bg-red-50", page: "namaste-codes" },
+    { title: "Mapping Explorer", description: "Explore code mappings between systems", icon: Map, iconColor: "text-green-600", bgColor: "bg-green-50", page: "mappings" },
+    { title: "Smart Search", description: "Unified search across all systems", icon: FileSearch, iconColor: "text-orange-600", bgColor: "bg-orange-50", page: "namaste-codes" },
+    { title: "Bulk Downloads", description: "Download FHIR data in bulk", icon: Download, iconColor: "text-yellow-600", bgColor: "bg-yellow-50", page: "downloads" },
   ];
 
   const handleActionClick = (page: string) => {
-    if (onNavigate) {
-      onNavigate(page);
-    }
+    if (onNavigate) onNavigate(page);
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-4">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold text-foreground">Code Mapping Portal</h1>
-        <p className="text-muted-foreground">
+        <h1 className="text-3xl font-bold">Code Mapping Portal</h1>
+        <p className="text-gray-500">
           Welcome to the FHIR Code Mapping Portal. Manage medical codes, mappings, and patient data
         </p>
       </div>
@@ -96,92 +45,101 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, index) => (
-          <Card key={index} className="bg-card hover:shadow-md transition-shadow">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {stat.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="text-2xl font-bold text-foreground">
-                {stat.value}
-              </div>
-              <div className="flex items-center space-x-1 text-sm text-muted-foreground">
-                {stat.trend === 'up' && <TrendingUp className="w-3 h-3 text-green-600" />}
+          <motion.div
+            key={index}
+            className="card bg-base-100 shadow"
+            whileHover={{ scale: 1.03, boxShadow: "0 10px 20px rgba(0,0,0,0.2)" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+          >
+            <div className="card-body p-4">
+              <h2 className="card-title text-sm text-gray-500">{stat.title}</h2>
+              <p className="text-2xl font-bold">{stat.value}</p>
+              <div className="flex items-center space-x-1 text-sm text-gray-400">
+                {stat.trend === "up" && <TrendingUp className="w-3 h-3 text-green-600" />}
                 <span>{stat.change}</span>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </motion.div>
         ))}
       </div>
 
       {/* Quick Actions */}
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold text-foreground">Quick Actions</h2>
+        <h2 className="text-xl font-semibold">Quick Actions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {quickActions.map((action, index) => {
             const Icon = action.icon;
             return (
-              <Card 
-                key={index} 
-                className="bg-card hover:shadow-md transition-all duration-200 cursor-pointer group"
+              <motion.div
+                key={index}
+                className="card bg-base-100 shadow cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
                 onClick={() => handleActionClick(action.page)}
               >
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      <div className={`p-3 rounded-lg ${action.bgColor}`}>
-                        <Icon className={`w-6 h-6 ${action.iconColor}`} />
-                      </div>
-                      <div className="space-y-1">
-                        <h3 className="font-semibold text-foreground">
-                          {action.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          {action.description}
-                        </p>
-                      </div>
+                <div className="card-body p-6 flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className={`p-3 rounded-lg ${action.bgColor}`}>
+                      <Icon className={`w-6 h-6 ${action.iconColor}`} stroke="currentColor" />
                     </div>
-                    <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all" />
+                    <div className="space-y-1">
+                      <h3 className="font-semibold">{action.title}</h3>
+                      <p className="text-sm text-gray-500">{action.description}</p>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
+                  <motion.div
+                    className="flex items-center"
+                    whileHover={{ x: 5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                  >
+                    <ArrowRight className="w-5 h-5 text-gray-400" />
+                  </motion.div>
+                </div>
+              </motion.div>
             );
           })}
         </div>
       </div>
 
-      {/* Recent Activity Section */}
-      <Card className="bg-card">
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+      {/* Recent Activity */}
+      <div className="card bg-base-100 shadow">
+        <div className="card-body">
+          <h3 className="card-title">Recent Activity</h3>
           <div className="space-y-3">
-            <div className="flex items-center justify-between py-2 border-b border-border">
+            <div className="flex items-center justify-between py-2 border-b border-gray-200">
               <div className="space-y-1">
-                <p className="text-sm font-medium">New mapping created: NAMASTE-12847 → ICD-11-MG30</p>
-                <p className="text-xs text-muted-foreground">2 hours ago</p>
+                <p className="text-sm font-medium">
+                  New mapping created: NAMASTE-12847 → ICD-11-MG30
+                </p>
+                <p className="text-xs text-gray-400">2 hours ago</p>
               </div>
-              <Button variant="outline" size="sm">View</Button>
+              <button className="btn btn-outline btn-sm">View</button>
             </div>
-            <div className="flex items-center justify-between py-2 border-b border-border">
+            <div className="flex items-center justify-between py-2 border-b border-gray-200">
               <div className="space-y-1">
-                <p className="text-sm font-medium">Batch upload completed: 43 new TM2 codes</p>
-                <p className="text-xs text-muted-foreground">5 hours ago</p>
+                <p className="text-sm font-medium">
+                  Batch upload completed: 43 new TM2 codes
+                </p>
+                <p className="text-xs text-gray-400">5 hours ago</p>
               </div>
-              <Button variant="outline" size="sm">View</Button>
+              <button className="btn btn-outline btn-sm">View</button>
             </div>
             <div className="flex items-center justify-between py-2">
               <div className="space-y-1">
-                <p className="text-sm font-medium">Admin audit: Code validation completed</p>
-                <p className="text-xs text-muted-foreground">1 day ago</p>
+                <p className="text-sm font-medium">
+                  Admin audit: Code validation completed
+                </p>
+                <p className="text-xs text-gray-400">1 day ago</p>
               </div>
-              <Button variant="outline" size="sm">View</Button>
+              <button className="btn btn-outline btn-sm">View</button>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }
