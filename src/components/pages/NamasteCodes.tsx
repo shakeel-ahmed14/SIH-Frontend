@@ -5,10 +5,12 @@ import { Input } from '../ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Badge } from '../ui/badge';
 import { Search, Filter, Plus, Eye, Edit, Trash2 } from 'lucide-react';
+import { motion } from "framer-motion";
+import { AnimatedDropdown } from '../ui/AnimatedDropdown';
 
 export function NamasteCodes() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
 
   // Mock data for Namaste codes
   const namasteCodesData = [
@@ -59,12 +61,12 @@ export function NamasteCodes() {
     }
   ];
 
-  const categories = ['all', 'Mental Health', 'Cardiovascular', 'Endocrine', 'Respiratory', 'Musculoskeletal'];
+  const categories = ['All Categories', 'Mental Health', 'Cardiovascular', 'Endocrine', 'Respiratory', 'Musculoskeletal'];
 
   const filteredCodes = namasteCodesData.filter(code => {
     const matchesSearch = code.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         code.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || code.category === selectedCategory;
+      code.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === 'All Categories' || code.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
@@ -87,80 +89,86 @@ export function NamasteCodes() {
             Manage and browse Namaste medical classification codes
           </p>
         </div>
-        <Button className="flex items-center space-x-2">
+        <motion.button
+          className="flex items-center space-x-2 btn btn-primary hover:bg-gray-200 rounded-md p-2"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
           <Plus className="w-4 h-4" />
           <span>Add New Code</span>
-        </Button>
+        </motion.button>
       </div>
 
-      {/* Search and Filters */}
       <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input
-                placeholder="Search codes, descriptions..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <div className="flex space-x-2">
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-2 border border-border rounded-md bg-background text-foreground"
-              >
-                {categories.map(category => (
-                  <option key={category} value={category}>
-                    {category === 'all' ? 'All Categories' : category}
-                  </option>
-                ))}
-              </select>
-              <Button variant="outline" className="flex items-center space-x-2">
-                <Filter className="w-4 h-4" />
-                <span>More Filters</span>
-              </Button>
-            </div>
-          </div>
+        <CardContent className="p-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+          {/* Search Box */}
+          <motion.div
+            className="flex-1 relative"
+            initial={{ opacity: 0, x: -20 }}
+            whileHover={{ scale: 1.02 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+            <Input
+              placeholder="Search codes, descriptions..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </motion.div>
+
+          {/* Category Select */}
+          <AnimatedDropdown
+            options={categories}
+            selected={selectedCategory}
+            onSelect={(val) => setSelectedCategory(val)}
+          />
+
+
+
+
+          {/* More Filters Button */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Button variant="outline" className="flex items-center space-x-2">
+              <Filter className="w-4 h-4" />
+              <span>More Filters</span>
+            </Button>
+          </motion.div>
         </CardContent>
       </Card>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Codes</p>
-              <p className="text-2xl font-bold">12,847</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Active</p>
-              <p className="text-2xl font-bold text-green-600">11,234</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Under Review</p>
-              <p className="text-2xl font-bold text-yellow-600">892</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Mapped</p>
-              <p className="text-2xl font-bold text-blue-600">8,456</p>
-            </div>
-          </CardContent>
-        </Card>
+        {[
+          { label: "Total Codes", value: "12,847", color: "text-foreground" },
+          { label: "Active", value: "11,234", color: "text-green-600" },
+          { label: "Under Review", value: "892", color: "text-yellow-600" },
+          { label: "Mapped", value: "8,456", color: "text-blue-600" },
+        ].map((stat, index) => (
+          <motion.div
+            key={index}
+            whileHover={{ scale: 1.04 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+          >
+            <Card>
+              <CardContent className="p-4">
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
       </div>
 
       {/* Codes Table */}
