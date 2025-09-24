@@ -5,6 +5,8 @@ import { Input } from '../ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Badge } from '../ui/badge';
 import { Search, Filter, Plus, Eye, Edit, ExternalLink } from 'lucide-react';
+import { motion } from "framer-motion";
+import { AnimatedDropdown } from '../ui/AnimatedDropdown';
 
 export function TM2Codes() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -75,7 +77,7 @@ export function TM2Codes() {
 
   const filteredCodes = tm2CodesData.filter(code => {
     const matchesSearch = code.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         code.title.toLowerCase().includes(searchTerm.toLowerCase());
+      code.title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesChapter = selectedChapter === 'all' || code.chapter === selectedChapter;
     return matchesSearch && matchesChapter;
   });
@@ -100,14 +102,22 @@ export function TM2Codes() {
           </p>
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline" className="flex items-center space-x-2">
+          <motion.button
+            className="flex items-center space-x-2 btn btn-outline rounded-md px-3 py-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <ExternalLink className="w-4 h-4" />
             <span>WHO Portal</span>
-          </Button>
-          <Button className="flex items-center space-x-2">
+          </motion.button>
+          <motion.button
+            className="flex items-center space-x-2 btn btn-primary rounded-md px-3 py-2"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             <Plus className="w-4 h-4" />
             <span>Import Codes</span>
-          </Button>
+          </motion.button>
         </div>
       </div>
 
@@ -115,7 +125,13 @@ export function TM2Codes() {
       <Card>
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <div className="flex-1 relative">
+            <motion.div
+              className="flex-1 relative"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              whileHover={{ scale: 1.02 }}
+            >
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
                 placeholder="Search ICD-11 codes, titles..."
@@ -123,77 +139,92 @@ export function TM2Codes() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
               />
-            </div>
-            <div className="flex space-x-2">
-              <select
-                value={selectedChapter}
-                onChange={(e) => setSelectedChapter(e.target.value)}
-                className="px-3 py-2 border border-border rounded-md bg-background text-foreground max-w-xs"
+            </motion.div>
+            {/* Chapter dropdown (custom animated) */}
+            <motion.div
+              className="flex space-x-2 items-start"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <AnimatedDropdown
+                options={['All Chapters', ...chapters.slice(1)]}
+                selected={selectedChapter === 'all' ? 'All Chapters' : selectedChapter}
+                onSelect={(value) => {
+                  setSelectedChapter(value === 'All Chapters' ? 'all' : value);
+                }}
+              />
+
+              {/* More Filters Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 300, delay: 0.08 }}
               >
-                <option value="all">All Chapters</option>
-                {chapters.slice(1).map(chapter => (
-                  <option key={chapter} value={chapter}>
-                    {chapter.length > 30 ? chapter.substring(0, 30) + '...' : chapter}
-                  </option>
-                ))}
-              </select>
-              <Button variant="outline" className="flex items-center space-x-2">
-                <Filter className="w-4 h-4" />
-                <span>More Filters</span>
-              </Button>
-            </div>
+                {/* wrap Button in motion.div so Button props/variants are preserved */}
+                <div className="inline-block">
+                  <Button variant="outline" className="flex items-center space-x-2">
+                    <Filter className="w-4 h-4" />
+                    <span>More Filters</span>
+                  </Button>
+                </div>
+              </motion.div>
+            </motion.div>
+
           </div>
         </CardContent>
       </Card>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total ICD-11 Codes</p>
-              <p className="text-2xl font-bold">8,652</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">TM2 Codes</p>
-              <p className="text-2xl font-bold text-purple-600">1,234</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Current Version</p>
-              <p className="text-2xl font-bold text-green-600">7,890</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Mapped to Namaste</p>
-              <p className="text-2xl font-bold text-blue-600">6,234</p>
-            </div>
-          </CardContent>
-        </Card>
+        {[
+          { label: "Total ICD-11 Codes", value: "8,652", color: "text-foreground" },
+          { label: "TM2 Codes", value: "1,234", color: "text-purple-600" },
+          { label: "Current Version", value: "7,890", color: "text-green-600" },
+          { label: "Mapped to Namaste", value: "6,234", color: "text-blue-600" },
+        ].map((stat, index) => (
+          <motion.div
+            key={index}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              show: { opacity: 1, y: 0 }
+            }}
+            whileHover={{ scale: 1.04 }}
+            transition={{ duration: 0.3 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <Card>
+              <CardContent className="p-4">
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
       </div>
 
       {/* Version Info */}
-      <Card>
-        <CardContent className="p-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <p className="font-medium">Current ICD-11 Version</p>
-              <p className="text-sm text-muted-foreground">ICD-11 for Mortality and Morbidity Statistics (Version 2024)</p>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4 }}
+      >
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="font-medium">Current ICD-11 Version</p>
+                <p className="text-sm text-muted-foreground">ICD-11 for Mortality and Morbidity Statistics (Version 2024)</p>
+              </div>
+              <Badge className="bg-blue-100 text-blue-800">Latest</Badge>
             </div>
-            <Badge className="bg-blue-100 text-blue-800">Latest</Badge>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       {/* Codes Table */}
       <Card>
@@ -215,8 +246,13 @@ export function TM2Codes() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredCodes.map((code) => (
-                  <TableRow key={code.id}>
+                {filteredCodes.map((code, index) => (
+                  <motion.tr
+                    key={code.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2, delay: index * 0.05 }}
+                  >
                     <TableCell className="font-mono">{code.code}</TableCell>
                     <TableCell className="max-w-md">
                       <div className="truncate" title={code.title}>
@@ -250,7 +286,7 @@ export function TM2Codes() {
                         </Button>
                       </div>
                     </TableCell>
-                  </TableRow>
+                  </motion.tr>
                 ))}
               </TableBody>
             </Table>

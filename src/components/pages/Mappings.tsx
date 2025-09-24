@@ -5,6 +5,8 @@ import { Input } from '../ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Badge } from '../ui/badge';
 import { Search, Filter, Plus, Eye, Edit, ArrowRight, Check, X, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { AnimatedDropdown } from '../ui/AnimatedDropdown';
 
 export function Mappings() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -83,9 +85,9 @@ export function Mappings() {
 
   const filteredMappings = mappingsData.filter(mapping => {
     const matchesSearch = mapping.namasteCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         mapping.icd11Code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         mapping.namasteDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         mapping.icd11Description.toLowerCase().includes(searchTerm.toLowerCase());
+      mapping.icd11Code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mapping.namasteDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mapping.icd11Description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = selectedStatus === 'all' || mapping.status === selectedStatus;
     return matchesSearch && matchesStatus;
   });
@@ -118,88 +120,143 @@ export function Mappings() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
-        <div>
+      <motion.div
+        className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0"
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35 }}
+      >
+        <motion.div
+          initial={{ opacity: 0, x: -8 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.35, delay: 0.05 }}
+        >
           <h1 className="text-2xl font-bold text-foreground">Code Mappings</h1>
           <p className="text-muted-foreground">
             Manage mappings between Namaste codes and ICD-11/TM2 classifications
           </p>
-        </div>
-        <Button className="flex items-center space-x-2">
-          <Plus className="w-4 h-4" />
-          <span>Create Mapping</span>
-        </Button>
-      </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 8 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.35, delay: 0.08 }}
+        >
+          <motion.button
+            className="flex items-center space-x-2"
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <Plus className="w-4 h-4" />
+            <span>Create Mapping</span>
+          </motion.button>
+        </motion.div>
+      </motion.div>
 
       {/* Search and Filters */}
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-              <Input
-                placeholder="Search mappings, codes, descriptions..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <div className="flex space-x-2">
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-3 py-2 border border-border rounded-md bg-background text-foreground"
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.25 }}
+      >
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+              {/* Search Box */}
+              <motion.div
+                className="flex-1 relative"
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
               >
-                {statuses.map(status => (
-                  <option key={status} value={status}>
-                    {status === 'all' ? 'All Statuses' : status}
-                  </option>
-                ))}
-              </select>
-              <Button variant="outline" className="flex items-center space-x-2">
-                <Filter className="w-4 h-4" />
-                <span>More Filters</span>
-              </Button>
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                <Input
+                  placeholder="Search mappings, codes, descriptions..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </motion.div>
+
+              {/* Status Select */}
+              <AnimatedDropdown
+                options={statuses.map(s => s === "all" ? "All Statuses" : s)}
+                selected={
+                  statuses.find(s => s === selectedStatus) === "all"
+                    ? "All Statuses"
+                    : selectedStatus
+                }
+                onSelect={(value) => {
+                  // Map back to internal key if needed
+                  const mapped =
+                    value === "All Statuses" ? "all" : value;
+                  setSelectedStatus(mapped);
+                }}
+              />
+
+
+              {/* More Filters Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 300, delay: 0.08 }}
+              >
+                {/* wrap Button in motion.div so Button props/variants are preserved */}
+                <div className="inline-block">
+                  <Button variant="outline" className="flex items-center space-x-2">
+                    <Filter className="w-4 h-4" />
+                    <span>More Filters</span>
+                  </Button>
+                </div>
+              </motion.div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Total Mappings</p>
-              <p className="text-2xl font-bold">6,234</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Approved</p>
-              <p className="text-2xl font-bold text-green-600">5,123</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Under Review</p>
-              <p className="text-2xl font-bold text-yellow-600">892</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Avg. Confidence</p>
-              <p className="text-2xl font-bold text-blue-600">89%</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-4 gap-4"
+        initial="hidden"
+        animate="show"
+        variants={{
+          hidden: {},
+          show: {
+            transition: { staggerChildren: 0.1 } // cards appear one by one
+          }
+        }}
+      >
+        {[
+          { label: "Total Mappings", value: "6,234", color: "text-foreground" },
+          { label: "Approved", value: "5,123", color: "text-green-600" },
+          { label: "Under Review", value: "892", color: "text-yellow-600" },
+          { label: "Avg. Confidence", value: "89%", color: "text-blue-600" },
+        ].map((stat, i) => (
+          <motion.div
+            key={i}
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              show: { opacity: 1, y: 0 }
+            }}
+            whileHover={{ scale: 1.04 }}
+            transition={{ duration: 0.3 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <Card>
+              <CardContent className="p-4">
+                <div className="space-y-2">
+                  <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </motion.div>
 
       {/* Mapping Quality Overview */}
       <Card>
@@ -207,35 +264,46 @@ export function Mappings() {
           <CardTitle>Mapping Quality Overview</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Exact Match</span>
-                <span className="text-sm font-medium">3,245 (52%)</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-green-600 h-2 rounded-full" style={{width: '52%'}}></div>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Close Match</span>
-                <span className="text-sm font-medium">2,234 (36%)</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-yellow-600 h-2 rounded-full" style={{width: '36%'}}></div>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm">Partial Match</span>
-                <span className="text-sm font-medium">755 (12%)</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2">
-                <div className="bg-orange-600 h-2 rounded-full" style={{width: '12%'}}></div>
-              </div>
-            </div>
-          </div>
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-3 gap-4"
+            initial="hidden"
+            animate="show"
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: 0.15 } },
+            }}
+          >
+            {[
+              { label: "Exact Match", value: "3,245 (52%)", percent: 52, color: "bg-green-600" },
+              { label: "Close Match", value: "2,234 (36%)", percent: 36, color: "bg-yellow-600" },
+              { label: "Partial Match", value: "755 (12%)", percent: 12, color: "bg-orange-600" },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                className="space-y-2"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  show: { opacity: 1, y: 0 },
+                }}
+                transition={{ duration: 0.4 }}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">{item.label}</span>
+                  <span className="text-sm font-medium">{item.value}</span>
+                </div>
+
+                {/* Animated progress bar */}
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <motion.div
+                    className={`${item.color} h-2 rounded-full`}
+                    initial={{ width: 0 }}
+                    animate={{ width: `${item.percent}%` }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </CardContent>
       </Card>
 

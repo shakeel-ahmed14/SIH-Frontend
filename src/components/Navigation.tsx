@@ -91,6 +91,9 @@ export function Navigation({ currentPage = 'home', onPageChange }: NavigationPro
                   variant={currentPage === item.id ? "default" : "ghost"}
                   onClick={() => handleNavClick(item.id)}
                   size="sm"
+                  className={`flex items-center space-x-2 
+                  ${currentPage === item.id ? "bg-zinc-700 text-white" : "hover:bg-zinc-300"}`}
+                  
                 >
                   <Icon className="w-4 h-4" />
                 </Button>

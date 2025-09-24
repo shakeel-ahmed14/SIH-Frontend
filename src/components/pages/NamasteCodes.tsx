@@ -131,10 +131,11 @@ export function NamasteCodes() {
 
           {/* More Filters Button */}
           <motion.div
-            whileHover={{ scale: 1.05 }}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 300, delay: 0.08 }}
           >
             <Button variant="outline" className="flex items-center space-x-2">
               <Filter className="w-4 h-4" />
@@ -158,6 +159,7 @@ export function NamasteCodes() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.1 }}
+            whileTap={{ scale: 0.97 }}
           >
             <Card>
               <CardContent className="p-4">
