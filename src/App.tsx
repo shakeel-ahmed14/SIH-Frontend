@@ -40,7 +40,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground antialiased">
+    <div className="min-h-screen flex bg-[#eeeeee] text-foreground antialiased">
       <Navigation 
         currentPage={currentPage} 
         onPageChange={setCurrentPage} 

@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Button } from './ui/button';
+import React, { useEffect, useRef, useState } from "react";
 import {
   Home,
   Code,
@@ -10,120 +9,225 @@ import {
   HelpCircle,
   Settings,
   Menu,
-  X
-} from 'lucide-react';
+  X,
+  HeartHandshake,
+} from "lucide-react";
+import { motion, type Variants } from "framer-motion";
 
-interface NavigationProps {
+type NavItem = { id: string; label: string; Icon: React.FC<any> };
+
+const NAV_ITEMS: NavItem[] = [
+  { id: "home", label: "Home", Icon: Home },
+  { id: "namaste-codes", label: "Namaste Codes", Icon: HeartHandshake },
+  { id: "tm2-codes", label: "TM2 / ICD-11", Icon: Code },
+  { id: "mappings", label: "Mappings", Icon: Map },
+  { id: "profiles", label: "Patient Records", Icon: Users },
+  { id: "downloads", label: "FHIR Downloads", Icon: Download },
+  { id: "admin", label: "Admin", Icon: Shield },
+  { id: "help", label: "Help", Icon: HelpCircle },
+  { id: "settings", label: "Settings", Icon: Settings },
+];
+
+interface SidebarNavProps {
   currentPage?: string;
-  onPageChange?: (page: string) => void;
+  onPageChange?: (id: string) => void;
 }
 
-export function Navigation({ currentPage = 'home', onPageChange }: NavigationProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+/* Framer Motion variants */
+const sidebarVariants: Variants = {
+  open: { width: 224, transition: { type: "spring", stiffness: 250, damping: 30 } }, // w-56 = 224px
+  closed: { width: 64, transition: { type: "spring", stiffness: 300, damping: 35 } }, // w-16 = 64px
+};
 
-  const navItems = [
-    { id: 'home', label: 'Home', icon: Home },
-    { id: 'namaste-codes', label: 'Namaste Codes', icon: Code },
-    { id: 'tm2-codes', label: 'TM2/ICD-11', icon: Code },
-    { id: 'mappings', label: 'Mappings', icon: Map },
-    { id: 'profiles', label: 'Patient Records', icon: Users },
-    { id: 'downloads', label: 'FHIR Downloads', icon: Download },
-    { id: 'admin', label: 'Admin', icon: Shield },
-    { id: 'help', label: 'Help', icon: HelpCircle },
-    { id: 'settings', label: 'Settings', icon: Settings },
-  ];
+const logoTextVariants: Variants = {
+  open: { opacity: 1, x: 0, transition: { duration: 0.18 } },
+  closed: { opacity: 1, x: -6, transition: { duration: 0.12 } },
+};
 
-  const handleNavClick = (pageId: string) => {
-    if (onPageChange) {
-      onPageChange(pageId);
+const navListVariants: Variants = {
+  open: { transition: { staggerChildren: 0.04, delayChildren: 0.06 } },
+  closed: {},
+};
+
+const navItemVariants: Variants = {
+  open: { opacity: 1, x: 0, transition: { duration: 0.18 } },
+  closed: { opacity: 1, x: -8, transition: { duration: 0.12 } },
+};
+
+const mobileDrawerVariants: Variants = {
+  open: { x: 0, transition: { type: "tween", duration: 0.24 } },
+  closed: { x: "-100%", transition: { type: "tween", duration: 0.24 } },
+};
+
+export function Navigation({ currentPage = "home", onPageChange }: SidebarNavProps) {
+  const [open, setOpen] = useState<boolean>(true); // desktop expanded by default
+  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const drawerRef = useRef<HTMLDivElement | null>(null);
+
+  // Close mobile drawer on Escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // Click outside to close mobile drawer
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!mobileOpen) return;
+      if (drawerRef.current && !drawerRef.current.contains(e.target as Node)) {
+        setMobileOpen(false);
+      }
     }
-    setIsMenuOpen(false);
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, [mobileOpen]);
+
+  const handleClick = (id: string) => {
+    onPageChange?.(id);
+    // close mobile drawer after selection
+    setMobileOpen(false);
   };
 
   return (
-    <nav className="bg-red">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-4">
-            <div className="bg-primary text-primary-foreground px-3 py-1 rounded-lg">
-              <span className="font-semibold">Code Mapping Portal</span>
+    <>
+      {/* Hamburger for small screens (top-left) */}
+      <div className="md:hidden fixed top-4 left-4 z-50">
+        <button
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMobileOpen((s) => !s)}
+          className="p-2 rounded-md bg-base-200 text-foreground shadow-sm"
+        >
+          {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
+
+      {/* Left vertical bar for md+ (collapsible) */}
+      <motion.aside
+        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden"
+        initial={false}
+        animate={open ? "open" : "closed"}
+        variants={sidebarVariants}
+        style={{ minWidth: 64 }} // ensure minimum so layout doesn't collapse
+      >
+        {/* Logo + toggle */}
+        <div className={open ? "flex items-center justify-between h-16 pr-15 gap-0" : "gap-0 pb-7 pt-3"}>
+          <div className="flex items-center space-x-2 pl-3">
+            <div className="rounded-md px-2 py-1 bg-primary text-primary-foreground font-semibold flex items-center">
+              
+              <motion.span
+                className={open ? "whitespace-nowrap overflow-hidden flex align-center justify-center" : "gap-0"}
+                variants={logoTextVariants}
+                aria-hidden={!open}
+              >
+                {open ? "🌿Ayush Vardhan" : ""}
+              </motion.span>
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
-            {navItems.slice(0, 4).map((item) => {
-              const Icon = item.icon;
-              return (
-                <Button
-                  key={item.id}
-                  variant="ghost"
-                  onClick={() => handleNavClick(item.id)}
-                  className={`flex items-center space-x-2 
-                  ${currentPage === item.id ? "bg-zinc-700 text-white" : "hover:bg-zinc-300"}`}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </Button>
-
-              );
-            })}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <Button
-              variant="ghost"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </Button>
-          </div>
-
-          {/* Desktop Right Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
-            {navItems.slice(4).map((item) => {
-              const Icon = item.icon;
-              return (
-                <Button
-                  key={item.id}
-                  variant={currentPage === item.id ? "default" : "ghost"}
-                  onClick={() => handleNavClick(item.id)}
-                  size="sm"
-                  className={`flex items-center space-x-2 
-                  ${currentPage === item.id ? "bg-zinc-700 text-white" : "hover:bg-zinc-300"}`}
-                  
-                >
-                  <Icon className="w-4 h-4" />
-                </Button>
-              );
-            })}
-          </div>
+          <button
+            aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
+            onClick={() => setOpen((s) => !s)}
+            className="p-1 rounded hover:bg-base-200 mr-2 pl-6"
+          >
+            {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
         </div>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border">
-            <div className="flex flex-col space-y-2">
-              {navItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Button
-                    key={item.id}
-                    variant={currentPage === item.id ? "default" : "ghost"}
-                    onClick={() => handleNavClick(item.id)}
-                    className="justify-start"
+        <motion.nav className="flex-1 overflow-y-auto" initial={false} animate={open ? "open" : "closed"}>
+          <motion.ul 
+          className="py-2 space-y-1 overflow-hidden" variants={navListVariants} role="list"
+          >
+            {NAV_ITEMS.map((item) => {
+              const active = currentPage === item.id;
+              const Icon = item.Icon;
+              return (
+                <motion.li key={item.id} variants={navItemVariants}>
+                  <motion.button
+                    onClick={() => handleClick(item.id)}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`w-full flex items-center gap-3 pl-4 py-2 text-sm transition-colors rounded-r-md
+                      ${active ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-base-200"}
+                      ${open ? "justify-start" : "justify-center"}
+                      ${currentPage === item.id ? "bg-zinc-700 text-white" : "hover:bg-zinc-300"}`}
+                    aria-current={active ? "page" : undefined}
                   >
-                    <Icon className="w-4 h-4 mr-2" />
-                    {item.label}
-                  </Button>
+                    <Icon className={`w-5 h-5 ${active ? "" : "text-muted-foreground"}`} />
+                    {open && <span className="truncate">{item.label}</span>}
+                  </motion.button>
+                </motion.li>
+              );
+            })}
+          </motion.ul>
+        </motion.nav>
+
+        <div className="px-3 py-4 border-base-200">
+          <motion.div initial={false} animate={open ? "open" : "closed"} variants={logoTextVariants}>
+            {open ? <div className="text-xs text-gray-500">v1.0 • Signed in</div> : <div className="text-center text-xs text-gray-500">v1.0</div>}
+          </motion.div>
+        </div>
+      </motion.aside>
+
+      {/* Mobile drawer (overlay) */}
+      <div
+        className={`fixed inset-0 z-40 md:hidden pointer-events-none transition-opacity duration-200 ${
+          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-100"
+        }`}
+        aria-hidden={!mobileOpen}
+      >
+        {/* overlay */}
+        <motion.div
+          className="absolute inset-0 bg-black/40"
+          initial={{ opacity: 100 }}
+          animate={{ opacity: mobileOpen ? 1 : 1 }}
+          onClick={() => setMobileOpen(false)}
+        />
+
+        {/* drawer */}
+        <motion.div
+          ref={drawerRef}
+          className="absolute left-0 top-0 bottom-0 w-72 bg-base-100 shadow-lg"
+          initial="closed"
+          animate={mobileOpen ? "open" : "closed"}
+          variants={mobileDrawerVariants}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="flex items-center justify-between h-16 px-4 border-b border-base-200">
+            <div className="font-semibold">Code Mapping Portal</div>
+            <button aria-label="Close" onClick={() => setMobileOpen(false)} className="p-1 rounded hover:bg-base-200">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          <nav className="p-2">
+            <ul className="space-y-1">
+              {NAV_ITEMS.map((item) => {
+                const active = currentPage === item.id;
+                const Icon = item.Icon;
+                return (
+                  <li key={item.id}>
+                    <motion.button
+                      onClick={() => handleClick(item.id)}
+                      whileHover={{ x: 6 }}
+                      className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md
+                        ${active ? "bg-primary text-primary-foreground" : "hover:bg-base-200"}`}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span>{item.label}</span>
+                    </motion.button>
+                  </li>
                 );
               })}
-            </div>
-          </div>
-        )}
+            </ul>
+          </nav>
+        </motion.div>
       </div>
-    </nav>
+    </>
   );
 }
