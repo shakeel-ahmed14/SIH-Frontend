@@ -147,7 +147,7 @@ export function ProfileList() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Total Patients</p>
               <p className="text-2xl font-bold">1,456</p>
@@ -155,7 +155,7 @@ export function ProfileList() {
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Active Cases</p>
               <p className="text-2xl font-bold text-green-600">892</p>
@@ -163,7 +163,7 @@ export function ProfileList() {
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Under Care</p>
               <p className="text-2xl font-bold text-blue-600">234</p>
@@ -171,7 +171,7 @@ export function ProfileList() {
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4">
+          <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Total Notes</p>
               <p className="text-2xl font-bold text-purple-600">3,247</p>

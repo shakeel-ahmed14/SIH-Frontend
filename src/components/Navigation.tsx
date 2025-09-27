@@ -31,6 +31,7 @@ const NAV_ITEMS: NavItem[] = [
 interface SidebarNavProps {
   currentPage?: string;
   onPageChange?: (id: string) => void;
+  onToggle?: (open: boolean) => void;
 }
 
 /* Framer Motion variants */
@@ -59,10 +60,17 @@ const mobileDrawerVariants: Variants = {
   closed: { x: "-100%", transition: { type: "tween", duration: 0.24 } },
 };
 
-export function Navigation({ currentPage = "home", onPageChange }: SidebarNavProps) {
+
+export function Navigation({ currentPage = "home", onPageChange, onToggle }: SidebarNavProps) {
   const [open, setOpen] = useState<boolean>(true); // desktop expanded by default
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const drawerRef = useRef<HTMLDivElement | null>(null);
+
+  // After open state is defined
+  useEffect(() => {
+    if (onToggle) onToggle(open);
+  }, [open, onToggle]);
+
 
   // Close mobile drawer on Escape
   useEffect(() => {
@@ -93,6 +101,8 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
     setMobileOpen(false);
   };
 
+
+
   return (
     <>
       {/* Hamburger for small screens (top-left) */}
@@ -108,7 +118,7 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
 
       {/* Left vertical bar for md+ (collapsible) */}
       <motion.aside
-        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden"
+        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden bg-white m-2 rounded-lg"
         initial={false}
         animate={open ? "open" : "closed"}
         variants={sidebarVariants}
@@ -117,10 +127,10 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
         {/* Logo + toggle */}
         <div className={open ? "flex items-center justify-between h-16 pr-15 gap-0" : "gap-0 pb-7 pt-3"}>
           <div className="flex items-center space-x-2 pl-3">
-            <div className="rounded-md px-2 py-1 bg-primary text-primary-foreground font-semibold flex items-center">
-              
+            <div className="rounded-md px-2 py-1 text-primary-foreground font-semibold flex items-center">
+
               <motion.span
-                className={open ? "whitespace-nowrap overflow-hidden flex align-center justify-center" : "gap-0"}
+                className={open ? "whitespace-nowrap overflow-hidden flex align-center justify-center text-black" : "gap-0"}
                 variants={logoTextVariants}
                 aria-hidden={!open}
               >
@@ -139,8 +149,8 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
         </div>
 
         <motion.nav className="flex-1 overflow-y-auto" initial={false} animate={open ? "open" : "closed"}>
-          <motion.ul 
-          className="py-2 space-y-1 overflow-hidden" variants={navListVariants} role="list"
+          <motion.ul
+            className="py-2 space-y-1 overflow-hidden" variants={navListVariants} role="list"
           >
             {NAV_ITEMS.map((item) => {
               const active = currentPage === item.id;
@@ -152,9 +162,9 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
                     className={`w-full flex items-center gap-3 pl-4 py-2 text-sm transition-colors rounded-r-md
-                      ${active ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-base-200"}
+                      ${active ? "text-primary-foreground" : "text-foreground hover:bg-base-200"}
                       ${open ? "justify-start" : "justify-center"}
-                      ${currentPage === item.id ? "bg-zinc-700 text-white" : "hover:bg-zinc-300"}`}
+                      ${currentPage === item.id ? "bg-[#739774] text-white" : "hover:bg-[#ECFAE5]"}`}
                     aria-current={active ? "page" : undefined}
                   >
                     <Icon className={`w-5 h-5 ${active ? "" : "text-muted-foreground"}`} />
@@ -175,9 +185,8 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
 
       {/* Mobile drawer (overlay) */}
       <div
-        className={`fixed inset-0 z-40 md:hidden pointer-events-none transition-opacity duration-200 ${
-          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-100"
-        }`}
+        className={`fixed inset-0 z-40 md:hidden pointer-events-none transition-opacity duration-200 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-100"
+          }`}
         aria-hidden={!mobileOpen}
       >
         {/* overlay */}

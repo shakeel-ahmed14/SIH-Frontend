@@ -10,14 +10,21 @@ import { FHIRDownloads } from './components/pages/FHIRDownloads';
 import { AdminPage } from './components/pages/AdminPage';
 import { HelpPage } from './components/pages/HelpPage';
 import { SettingsPage } from './components/pages/SettingsPage';
+import Landing from './components/Landing';
+
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState('landing');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+
 
   const renderCurrentPage = () => {
     switch (currentPage) {
+      case 'landing':
+        return <Landing onNavigate={setCurrentPage} />;
       case 'home':
-        return <Dashboard onNavigate={setCurrentPage} />;
+        return <Dashboard />;
       case 'namaste-codes':
         return <NamasteCodes />;
       case 'tm2-codes':
@@ -40,14 +47,29 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#eeeeee] text-foreground antialiased">
-      <Navigation 
-        currentPage={currentPage} 
-        onPageChange={setCurrentPage} 
-      />
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
-        {renderCurrentPage()}
-      </main>
-    </div>
+    <>
+      <div className="min-h-screen flex bg-[#2e392e] text-foreground antialiased">
+        {currentPage !== "landing" && (
+          <Navigation
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            onToggle={setSidebarOpen} // track sidebar state
+          />
+        )}
+        <main
+          className={
+            currentPage !== "landing"
+              ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? "container mx-auto max-w-7xl" : "w-full"
+              } m-2 rounded-lg bg-white`
+              : "container"
+          }
+        >
+          {renderCurrentPage()}
+        </main>
+
+
+      </div>
+    </>
   );
+
 }
