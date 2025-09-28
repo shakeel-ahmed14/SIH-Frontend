@@ -84,7 +84,7 @@ export function ProfileList() {
 
       {/* Search and Filters */}
       <Card>
-        <CardContent className="p-6">
+        <CardContent className="p-6 bg-blue-100 rounded-2xl">
           <motion.div
             className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
             initial={{ opacity: 0, x: -20 }}
@@ -112,7 +112,7 @@ export function ProfileList() {
             >
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="px-4 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className="px-4 py-2 bg-blue-200 border rounded-md shadow-sm hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-green-400"
                 >
                   {selectedStatus === 'all' ? 'All Statuses' : selectedStatus}
                 </DropdownMenuTrigger>
@@ -138,7 +138,7 @@ export function ProfileList() {
               </DropdownMenu>
 
               <motion.button
-                className="flex items-center space-x-2 border rounded-md px-3 py-2"
+                className="flex items-center space-x-2 border rounded-md px-3 py-2 bg-blue-200 hover:bg-blue-300"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 300 }}
@@ -167,7 +167,7 @@ export function ProfileList() {
             transition={{ duration: 0.3, delay: index * 0.1 }}
           >
             <Card>
-              <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
+              <CardContent className="p-4 bg-white rounded-xl">
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                   <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
@@ -179,7 +179,7 @@ export function ProfileList() {
       </div>
 
       {/* Patients Table */}
-      <Card>
+      <Card className='bg-white/50'>
         <CardHeader>
           <CardTitle>Patient Records ({filteredPatients.length} results)</CardTitle>
         </CardHeader>

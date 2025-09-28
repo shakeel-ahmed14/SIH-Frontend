@@ -169,7 +169,7 @@ export function Mappings() {
         transition={{ duration: 0.25 }}
       >
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-6 bg-blue-100 rounded-2xl">
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               {/* Search Box */}
               <motion.div
@@ -191,7 +191,7 @@ export function Mappings() {
               {/* Status Select */}
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="px-4 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className="px-4 py-2 bg-blue-200 border rounded-md shadow-sm hover:bg-blue-300"
                 >
                   {selectedStatus}
                 </DropdownMenuTrigger>
@@ -229,7 +229,7 @@ export function Mappings() {
               >
                 {/* wrap Button in motion.div so Button props/variants are preserved */}
                 <div className="inline-block">
-                  <Button variant="outline" className="flex items-center space-x-2">
+                  <Button variant="outline" className="flex items-center space-x-2 bg-blue-200 hover:bg-blue-300">
                     <Filter className="w-4 h-4" />
                     <span>More Filters</span>
                   </Button>
@@ -269,7 +269,7 @@ export function Mappings() {
             whileTap={{ scale: 0.97 }}
           >
             <Card>
-              <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
+              <CardContent className="p-4 bg-white rounded-xl">
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                   <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
@@ -330,7 +330,7 @@ export function Mappings() {
       </Card>
 
       {/* Mappings Table */}
-      <Card>
+      <Card className='bg-white/50'>
         <CardHeader>
           <CardTitle>Code Mappings ({filteredMappings.length} results)</CardTitle>
         </CardHeader>

@@ -130,7 +130,7 @@ export function TM2Codes() {
 
       {/* Search and Filters */}
       <Card>
-        <CardContent className="p-6">
+        <CardContent className="p-6 bg-blue-100 rounded-xl">
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
             <motion.div
               className="flex-1 relative"
@@ -150,7 +150,7 @@ export function TM2Codes() {
             {/* Chapter dropdown (custom animated) */}
             <DropdownMenu>
               <DropdownMenuTrigger
-                className="px-4 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
+                className="px-4 py-2 bg-blue-200 border rounded-md shadow-sm hover:bg-blue-300 focus:outline-none"
               >
                 {selectedChapter}
               </DropdownMenuTrigger>
@@ -187,7 +187,7 @@ export function TM2Codes() {
             >
               {/* wrap Button in motion.div so Button props/variants are preserved */}
               <div className="inline-block">
-                <Button variant="outline" className="flex items-center space-x-2">
+                <Button variant="outline" className="flex items-center space-x-2 bg-blue-200 hover:bg-blue-300 rounded-md">
                   <Filter className="w-4 h-4" />
                   <span>More Filters</span>
                 </Button>
@@ -217,7 +217,7 @@ export function TM2Codes() {
         whileTap={{ scale: 0.97 }}
       >
         <Card>
-          <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
+          <CardContent className="p-4 bg-white rounded-xl">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">{stat.label}</p>
               <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
@@ -234,8 +234,8 @@ export function TM2Codes() {
     animate={{ opacity: 1 }}
     transition={{ duration: 0.4 }}
   >
-    <Card>
-      <CardContent className="p-4">
+    <Card className="bg-[#f8f8f8]/50">
+      <CardContent className="p-4 rounded-xl">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
             <p className="font-medium">Current ICD-11 Version</p>
@@ -248,7 +248,7 @@ export function TM2Codes() {
   </motion.div>
 
   {/* Codes Table */ }
-  <Card>
+  <Card className='bg-[#f8f8f8]/50'>
     <CardHeader>
       <CardTitle>ICD-11 Codes ({filteredCodes.length} results)</CardTitle>
     </CardHeader>

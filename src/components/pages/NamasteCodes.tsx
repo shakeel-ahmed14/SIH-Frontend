@@ -127,7 +127,7 @@ export function NamasteCodes() {
       </div>
 
       <Card>
-        <CardContent className="p-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+        <CardContent className="p-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 bg-blue-100 rounded-xl">
           {/* Search Box */}
           <motion.div
             className="flex-1 relative"
@@ -153,7 +153,7 @@ export function NamasteCodes() {
           /> */}
           <DropdownMenu>
             <DropdownMenuTrigger
-              className="px-4 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
+              className="px-4 py-2 bg-blue-200 border rounded-md shadow-sm hover:bg-blue-300 focus:outline-none"
             >
               {selectedCategory}
             </DropdownMenuTrigger>
@@ -191,7 +191,7 @@ export function NamasteCodes() {
             whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 300, delay: 0.08 }}
           >
-            <Button variant="outline" className="flex items-center space-x-2">
+            <Button variant="outline" className="flex items-center space-x-2 bg-blue-200 hover:bg-blue-300">
               <Filter className="w-4 h-4" />
               <span>More Filters</span>
             </Button>
@@ -207,7 +207,7 @@ export function NamasteCodes() {
           { label: "Under Review", value: "892", color: "text-yellow-600" },
           { label: "Mapped", value: "8,456", color: "text-blue-600" },
         ].map((stat, index) => (
-          <motion.div
+          <motion.div 
             key={index}
             whileHover={{ scale: 1.04 }}
             initial={{ opacity: 0, y: 20 }}
@@ -216,7 +216,7 @@ export function NamasteCodes() {
             whileTap={{ scale: 0.97 }}
           >
             <Card>
-              <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
+              <CardContent className="p-4 bg-white rounded-xl">
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                   <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
@@ -228,7 +228,7 @@ export function NamasteCodes() {
       </div>
 
       {/* Codes Table */}
-      <Card>
+      <Card className='bg-white/60'>
         <CardHeader>
           <CardTitle>Namaste Codes ({filteredCodes.length} results)</CardTitle>
         </CardHeader>

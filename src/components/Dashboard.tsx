@@ -81,14 +81,14 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 onClick={() => handleActionClick(action.page)}
               >
-                <div className="card-body p-6 flex items-center justify-between bg-[#A7AAE1]/40 rounded-md">
+                <div className="card-body p-6 flex items-center justify-between bg-white rounded-md">
                   <div className="flex items-center space-x-4">
                     <div className={`p-3 rounded-lg ${action.bgColor}`}>
                       <Icon className={`w-6 h-6 ${action.iconColor}`} stroke="currentColor" />
                     </div>
                     <div className="space-y-1">
                       <h3 className="font-semibold">{action.title}</h3>
-                      <p className="text-sm text-gray-500">{action.description}</p>
+                      <p className="text-sm text-gray-700">{action.description}</p>
                     </div>
                   </div>
                   <motion.div
