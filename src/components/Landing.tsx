@@ -54,7 +54,7 @@ const Landing: React.FC<LandingProps> = ({ onNavigate }) => {
         className="go-btn w-16 h-16 flex items-center justify-center rounded-full 
              bg-white/30 backdrop-blur-md border border-white/40 
              text-black shadow-lg hover:bg-white/40 transition 
-             absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20"
+             absolute bottom-10 left-[91%] transform -translate-x-[90%] z-20"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ scale: 1.1 }}

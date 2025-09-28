@@ -1,4 +1,19 @@
   /* Container */
+.background-vframe {
+  position: absolute;
+  width: 200%;          /* make much wider */
+  height: 200%;         /* make much taller */
+  top: -50%;            /* move up */
+  left: -50%;           /* move left */
+  border: none;
+  z-index: -1;
+  transform: scale(1.5);       /* zoom background */
+  transform-origin: center;    /* zoom from center */
+  pointer-events: none;        /* ensure clicks pass through */
+}
+
+
+
   .product-container {
     position: relative;
     width: 100%;
@@ -9,7 +24,8 @@
 
   .logo {
     display: flex;
-    align-items: flex-start; /* align items at the top */
+    align-items: flex-start;
+    /* align items at the top */
     gap: 10px;
     color: #fff;
   }
@@ -19,40 +35,30 @@
     font-weight: 700;
     letter-spacing: 1px;
     position: relative;
-    top: 6px;  /* push text slightly lower */
+    top: 6px;
+    /* push text slightly lower */
   }
 
 
   .brand {
-    font-size: 1.8rem;     /* increase size */
-    font-weight: 650;    /* make it bold */
-    letter-spacing: 0.3px; /* optional: spacing between letters */
+    font-size: 1.8rem;
+    /* increase size */
+    font-weight: 650;
+    /* make it bold */
+    letter-spacing: 0.3px;
+    /* optional: spacing between letters */
     position: relative;
     top: 9px;
   }
 
 
   .logo-img {
-    width: 60px;   /* adjust size */
+    width: 60px;
+    /* adjust size */
     height: auto;
     object-fit: contain;
     position: relative;
     top: 9px;
-  }
-
-  .background-iframe {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border: none;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    pointer-events: none;
-
-    /* Scale up background */
-    transform: scale(2);   /* increase number to make waves bigger */
-    transform-origin: center;
   }
 
 
@@ -148,36 +154,41 @@
     line-height: 1.4;
   }
 
-.product-container::before {
-  content: "";
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* Black gradient from bottom to top */
-  background: linear-gradient(to top, rgba(0, 0, 0, 0), transparent);
-  z-index: 0;
-  pointer-events: none;
-}
+  .product-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+    z-index: 0;
+    pointer-events: none;
+  }
 
-.background-spline {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  z-index: -1 !important;        /* behind everything */
-  pointer-events: none !important; /* allow clicks to pass through */
-  user-select: none !important;
-  touch-action: none !important;
-}
+  .background-spline {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: -1 !important;
+    /* behind everything */
+    pointer-events: none !important;
+    /* allow clicks to pass through */
+    user-select: none !important;
+    touch-action: none !important;
+    transform: scale(1.15);
+    /* increase number to make waves bigger */
+    transform-origin: center;
+  }
 
 
-.go-btn {
-  position: absolute;
-  bottom: 40px;  /* distance from bottom */
-  left: 52%;
-  transform: translateX(-50%);
-  z-index: 20;
-}
+  .go-btn {
+    position: absolute;
+    bottom: 40px;
+    /* distance from bottom */
+    left: 52%;
+    transform: translateX(-50%);
+    z-index: 20;
+  }

@@ -8,7 +8,7 @@ const Product: React.FC = () => {
       <iframe
         src="https://my.spline.design/dunes-Ey2C7Nf6y0pjpQ2Nm5DfnsTF/"
         title="background"
-        className="background-iframe"
+        className="background-vframe"
       ></iframe>
 
       {/* Navbar */}

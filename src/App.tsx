@@ -11,6 +11,7 @@ import { AdminPage } from './components/pages/AdminPage';
 import { HelpPage } from './components/pages/HelpPage';
 import { SettingsPage } from './components/pages/SettingsPage';
 import Landing from './components/Landing';
+import Spline from '@splinetool/react-spline';
 
 
 export default function App() {
@@ -47,37 +48,34 @@ export default function App() {
   };
 
   return (
-    <>
-      <div className="relative min-h-screen flex text-foreground antialiased">
-        {/* Blurred background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center filter blur-md z-0"
-          style={{ backgroundImage: "url('/morning-scenery-wallpaper-1920x1200_6.jpg')" }}
-        ></div>
-
-        {/* Content */}
-        <div className="relative z-10 flex w-full">
-          {currentPage !== "landing" && (
-            <Navigation
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-              onToggle={setSidebarOpen}
-            />
-          )}
-
-          <main
-            className={
-              currentPage !== "landing"
-                ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? "container max-w-full m-5" : "w-full m-5"} m-2 rounded-lg bg-[#eefae8]/70`
-                : "flex-1 min-h-screen"
-            }
-          >
-            {renderCurrentPage()}
-          </main>
-        </div>
+    <div className="relative min-h-screen flex text-foreground antialiased">
+      {/* Spline background */}
+      <div className="absolute inset-0 z-0">
+        <Spline scene="https://prod.spline.design/X3eEwWfsat5SfMSW/scene.splinecode" />
       </div>
 
-    </>
+      {/* Navigation and content */}
+      <div className="relative z-10 flex w-full">
+        {currentPage !== 'landing' && (
+          <Navigation
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            onToggle={setSidebarOpen}
+          />
+        )}
+
+        <main
+          className={
+            currentPage !== 'landing'
+              ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? 'container max-w-full m-5' : 'w-full m-5'
+              } m-2 rounded-lg bg-white/70 backdrop-blur-sm`
+              : 'flex-1 min-h-screen'
+          }
+        >
+          {renderCurrentPage()}
+        </main>
+      </div>
+    </div>
   );
 
 }
