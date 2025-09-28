@@ -120,7 +120,7 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
 
       {/* Left vertical bar for md+ (collapsible) */}
       <motion.aside
-        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden bg-[#7ebc81]/70 m-5 mr-0 rounded-lg"
+        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden bg-[#] m-5 mr-0 rounded-lg"
         initial={false}
         animate={open ? "open" : "closed"}
         variants={sidebarVariants}
@@ -137,7 +137,7 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
                   className="w-8 h-8 object-contain flex-shrink-0"
                 />
                 <motion.span
-                  className="whitespace-nowrap overflow-hidden text-black font-semibold text-sm"
+                  className="whitespace-nowrap overflow-hidden text-white font-semibold text-sm"
                   variants={logoTextVariants}
                 >
                   AyushVardhan
@@ -177,12 +177,12 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
                     className={`group w-full flex items-center gap-3 pl-4 py-2 text-sm transition-colors rounded-r-md
-                      ${active ? "text-white" : "text-white hover:text-black"}
+                      ${active ? "text-white" : "text-black hover:text-black"}
                       ${open ? "justify-start" : "justify-center"}
-                      ${currentPage === item.id ? "bg-[#739774] text-white" : "hover:bg-[#ECFAE5]"}`}
+                      ${currentPage === item.id ? "bg-[#696FC7] text-black" : "hover:bg-[#696FC7]/40"}`}
                     aria-current={active ? "page" : undefined}
                   >
-                    <Icon className={`w-5 h-5 ${active ? "text-white" : "text-white group-hover:text-black"}`} />
+                    <Icon className={`w-5 h-5 ${active ? "text-white" : "text-black group-hover:text-black"}`} />
                     {open && <span className="truncate">{item.label}</span>}
                   </motion.button>
                 </motion.li>

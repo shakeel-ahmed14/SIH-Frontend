@@ -48,34 +48,39 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen flex text-foreground antialiased">
-      {/* Spline background */}
-      <div className="absolute inset-0 z-0">
-        <Spline scene="https://prod.spline.design/X3eEwWfsat5SfMSW/scene.splinecode" />
+    <>
+      <div className="relative min-h-screen flex text-foreground antialiased">
+        {/* Blurred background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center filter blur-md z-0"
+          style={{ backgroundImage: "url('/8748538-4k-minimalist-blue-wallpaper.jpg')" }}
+        ></div>
+
+        <div className="absolute inset-0 bg-black/20"></div>  {/* black tint with 20% opacity */}
+
+        {/* Content */}
+        <div className="relative z-10 flex w-full">
+          {currentPage !== "landing" && (
+            <Navigation
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              onToggle={setSidebarOpen}
+            />
+          )}
+
+          <main
+            className={
+              currentPage !== "landing"
+                ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? "container max-w-full m-5" : "w-full m-5"} m-2 rounded-lg bg-blue-200/50`
+                : "flex-1 min-h-screen"
+            }
+          >
+            {renderCurrentPage()}
+          </main>
+        </div>
       </div>
 
-      {/* Navigation and content */}
-      <div className="relative z-10 flex w-full">
-        {currentPage !== 'landing' && (
-          <Navigation
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-            onToggle={setSidebarOpen}
-          />
-        )}
-
-        <main
-          className={
-            currentPage !== 'landing'
-              ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? 'container max-w-full m-5' : 'w-full m-5'
-              } m-2 rounded-lg bg-white/70 backdrop-blur-sm`
-              : 'flex-1 min-h-screen'
-          }
-        >
-          {renderCurrentPage()}
-        </main>
-      </div>
-    </div>
+    </>
   );
 
 }

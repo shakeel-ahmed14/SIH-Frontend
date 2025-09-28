@@ -47,7 +47,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         {stats.map((stat, index) => (
           <motion.div
             key={index}
-            className="card bg-base-100 shadow bg-white/90 rounded-md"
+            className="card bg-base-100 shadow bg-white/50 rounded-md"
             whileHover={{ scale: 1.03, boxShadow: "0 10px 20px rgba(0,0,0,0.2)" }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -81,7 +81,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 onClick={() => handleActionClick(action.page)}
               >
-                <div className="card-body p-6 flex items-center justify-between bg-[#d2edd9] rounded-md">
+                <div className="card-body p-6 flex items-center justify-between bg-[#A7AAE1]/40 rounded-md">
                   <div className="flex items-center space-x-4">
                     <div className={`p-3 rounded-lg ${action.bgColor}`}>
                       <Icon className={`w-6 h-6 ${action.iconColor}`} stroke="currentColor" />
@@ -107,7 +107,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
       {/* Recent Activity */}
       <div className="card bg-base-100 shadow">
-        <div className="card-body bg-[#f8f8f8] p-3 rounded-2xl">
+        <div className="card-body bg-[#f8f8f8]/50 p-3 rounded-2xl">
           <h3 className="card-title">Recent Activity</h3>
           <div className="space-y-3">
             <div className="flex items-center justify-between py-2 border-b border-gray-200">
