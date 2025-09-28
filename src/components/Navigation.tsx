@@ -13,6 +13,8 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
+import pancakeLogo from "../images/pancakes.png";
+
 
 type NavItem = { id: string; label: string; Icon: React.FC<any> };
 
@@ -42,7 +44,7 @@ const sidebarVariants: Variants = {
 
 const logoTextVariants: Variants = {
   open: { opacity: 1, x: 0, transition: { duration: 0.18 } },
-  closed: { opacity: 1, x: -6, transition: { duration: 0.12 } },
+  closed: { opacity: 0, x: -20, transition: { duration: 0.12 } },
 };
 
 const navListVariants: Variants = {
@@ -125,27 +127,40 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
         style={{ minWidth: 64 }} // ensure minimum so layout doesn't collapse
       >
         {/* Logo + toggle */}
-        <div className={open ? "flex items-center justify-between h-16 pr-15 gap-0" : "gap-0 pb-7 pt-3"}>
-          <div className="flex items-center space-x-2 pl-3">
-            <div className="rounded-md px-2 py-1 text-primary-foreground font-semibold flex items-center">
+        <div className="flex items-center justify-center h-16 px-3">
+          {open ? (
+            <>
+              <div className="flex items-center space-x-2 min-w-0 flex-1">
+                <img
+                  src={pancakeLogo}
+                  alt="Logo"
+                  className="w-8 h-8 object-contain flex-shrink-0"
+                />
+                <motion.span
+                  className="whitespace-nowrap overflow-hidden text-black font-semibold text-sm"
+                  variants={logoTextVariants}
+                >
+                  AyushVardhan
+                </motion.span>
+              </div>
 
-              <motion.span
-                className={open ? "whitespace-nowrap overflow-hidden flex align-center justify-center text-black" : "gap-0"}
-                variants={logoTextVariants}
-                aria-hidden={!open}
+              <button
+                aria-label="Collapse sidebar"
+                onClick={() => setOpen(false)}
+                className="p-1 rounded hover:bg-base-200 flex-shrink-0"
               >
-                {open ? "🌿AyushVardhan" : ""}
-              </motion.span>
-            </div>
-          </div>
-
-          <button
-            aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
-            onClick={() => setOpen((s) => !s)}
-            className="p-1 rounded hover:bg-base-200 mr-2 pl-6"
-          >
-            {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
+                <X className="w-4 h-4" />
+              </button>
+            </>
+          ) : (
+            <button
+              aria-label="Expand sidebar"
+              onClick={() => setOpen(true)}
+              className="p-2 rounded hover:bg-base-200"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         <motion.nav className="flex-1 overflow-y-auto" initial={false} animate={open ? "open" : "closed"}>
@@ -161,13 +176,13 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
                     onClick={() => handleClick(item.id)}
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`w-full flex items-center gap-3 pl-4 py-2 text-sm transition-colors rounded-r-md
-                      ${active ? "text-primary-foreground" : "text-foreground hover:bg-base-200"}
+                    className={`group w-full flex items-center gap-3 pl-4 py-2 text-sm transition-colors rounded-r-md
+                      ${active ? "text-white" : "text-white hover:text-black"}
                       ${open ? "justify-start" : "justify-center"}
                       ${currentPage === item.id ? "bg-[#739774] text-white" : "hover:bg-[#ECFAE5]"}`}
                     aria-current={active ? "page" : undefined}
                   >
-                    <Icon className={`w-5 h-5 ${active ? "" : "text-muted-foreground"}`} />
+                    <Icon className={`w-5 h-5 ${active ? "text-white" : "text-white group-hover:text-black"}`} />
                     {open && <span className="truncate">{item.label}</span>}
                   </motion.button>
                 </motion.li>
@@ -185,15 +200,15 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
 
       {/* Mobile drawer (overlay) */}
       <div
-        className={`fixed inset-0 z-40 md:hidden pointer-events-none transition-opacity duration-200 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-100"
+        className={`fixed inset-0 z-40 md:hidden pointer-events-none transition-opacity duration-200 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0"
           }`}
         aria-hidden={!mobileOpen}
       >
         {/* overlay */}
         <motion.div
           className="absolute inset-0 bg-black/40"
-          initial={{ opacity: 100 }}
-          animate={{ opacity: mobileOpen ? 1 : 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: mobileOpen ? 1 : 0 }}
           onClick={() => setMobileOpen(false)}
         />
 
