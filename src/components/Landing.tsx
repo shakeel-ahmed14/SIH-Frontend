@@ -37,7 +37,7 @@ const Landing: React.FC<LandingProps> = ({ onNavigate }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          Welcome to Ayush Vardhan
+          Welcome to AyushVardhan
         </motion.h1>
 
         <motion.p
@@ -46,7 +46,7 @@ const Landing: React.FC<LandingProps> = ({ onNavigate }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.7 }}
         >
-          Explore ICD-11, TM2, and NAMASTE codes
+          Three Standards. One Vision. Infinite Healthcare Solutions.
         </motion.p>
       </div>
 
