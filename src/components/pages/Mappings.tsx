@@ -1,12 +1,33 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
-import { Badge } from '../ui/badge';
-import { Search, Filter, Plus, Eye, Edit, ArrowRight, Check, X, AlertCircle } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { AnimatedDropdown } from '../ui/AnimatedDropdown';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
+import {
+  Search,
+  Filter,
+  Plus,
+  Eye,
+  Edit,
+  Check,
+  X,
+  AlertCircle,
+  Download,
+  Globe2,
+  Stethoscope,
+  Sparkles,
+  ShieldCheck,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Badge } from "../ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,122 +35,168 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu"
+} from "../ui/dropdown-menu";
 
 export function Mappings() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('All Categories');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("All Categories");
 
-  // Mock data for code mappings
   const mappingsData = [
     {
-      id: 'MAP-001',
-      namasteCode: 'NAM001',
-      namasteDescription: 'Anxiety disorder, generalized',
-      icd11Code: 'MG30.0',
-      icd11Description: 'Generalized anxiety disorder',
-      mappingType: 'Exact Match',
+      id: "MAP-001",
+      namasteCode: "NAM001",
+      namasteDescription: "Anxiety disorder, generalized",
+      icd11Code: "MG30.0",
+      icd11Description: "Generalized anxiety disorder",
+      mappingType: "Exact Match",
       confidence: 95,
-      status: 'Approved',
-      reviewer: 'Dr. Smith',
-      dateCreated: '2024-09-15',
-      lastReviewed: '2024-09-20'
+      status: "Approved",
+      reviewer: "Dr. Smith",
+      dateCreated: "2024-09-15",
+      lastReviewed: "2024-09-20",
     },
     {
-      id: 'MAP-002',
-      namasteCode: 'NAM002',
-      namasteDescription: 'Hypertension, essential',
-      icd11Code: 'BA00',
-      icd11Description: 'Essential hypertension',
-      mappingType: 'Exact Match',
+      id: "MAP-002",
+      namasteCode: "NAM002",
+      namasteDescription: "Hypertension, essential",
+      icd11Code: "BA00",
+      icd11Description: "Essential hypertension",
+      mappingType: "Exact Match",
       confidence: 98,
-      status: 'Approved',
-      reviewer: 'Dr. Johnson',
-      dateCreated: '2024-09-14',
-      lastReviewed: '2024-09-19'
+      status: "Approved",
+      reviewer: "Dr. Johnson",
+      dateCreated: "2024-09-14",
+      lastReviewed: "2024-09-19",
     },
     {
-      id: 'MAP-003',
-      namasteCode: 'NAM003',
-      namasteDescription: 'Diabetes mellitus, type 2',
-      icd11Code: '5A11',
-      icd11Description: 'Type 2 diabetes mellitus',
-      mappingType: 'Close Match',
+      id: "MAP-003",
+      namasteCode: "NAM003",
+      namasteDescription: "Diabetes mellitus, type 2",
+      icd11Code: "5A11",
+      icd11Description: "Type 2 diabetes mellitus",
+      mappingType: "Close Match",
       confidence: 87,
-      status: 'Under Review',
-      reviewer: 'Dr. Wilson',
-      dateCreated: '2024-09-13',
-      lastReviewed: '2024-09-18'
+      status: "Under Review",
+      reviewer: "Dr. Wilson",
+      dateCreated: "2024-09-13",
+      lastReviewed: "2024-09-18",
     },
     {
-      id: 'MAP-004',
-      namasteCode: 'NAM004',
-      namasteDescription: 'Chronic obstructive pulmonary disease',
-      icd11Code: 'CA22',
-      icd11Description: 'Chronic obstructive pulmonary disease',
-      mappingType: 'Exact Match',
+      id: "MAP-004",
+      namasteCode: "NAM004",
+      namasteDescription: "Chronic obstructive pulmonary disease",
+      icd11Code: "CA22",
+      icd11Description: "Chronic obstructive pulmonary disease",
+      mappingType: "Exact Match",
       confidence: 96,
-      status: 'Approved',
-      reviewer: 'Dr. Davis',
-      dateCreated: '2024-09-12',
-      lastReviewed: '2024-09-17'
+      status: "Approved",
+      reviewer: "Dr. Davis",
+      dateCreated: "2024-09-12",
+      lastReviewed: "2024-09-17",
     },
     {
-      id: 'MAP-005',
-      namasteCode: 'NAM005',
-      namasteDescription: 'Rheumatoid arthritis',
-      icd11Code: 'FA20.0',
-      icd11Description: 'Rheumatoid arthritis, unspecified',
-      mappingType: 'Partial Match',
+      id: "MAP-005",
+      namasteCode: "NAM005",
+      namasteDescription: "Rheumatoid arthritis",
+      icd11Code: "FA20.0",
+      icd11Description: "Rheumatoid arthritis, unspecified",
+      mappingType: "Partial Match",
       confidence: 75,
-      status: 'Pending Review',
+      status: "Pending Review",
       reviewer: null,
-      dateCreated: '2024-09-11',
-      lastReviewed: null
-    }
+      dateCreated: "2024-09-11",
+      lastReviewed: null,
+    },
   ];
 
-  const statuses = ['All Categories', 'Approved', 'Under Review', 'Pending Review', 'Rejected'];
+  const statuses = ["All Categories", "Approved", "Under Review", "Pending Review", "Rejected"];
 
-  const filteredMappings = mappingsData.filter(mapping => {
-    const matchesSearch = mapping.namasteCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      mapping.icd11Code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      mapping.namasteDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      mapping.icd11Description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === 'All Categories' || mapping.status === selectedStatus;
+  const filteredMappings = mappingsData.filter((mapping) => {
+    const term = searchTerm.toLowerCase();
+    const matchesSearch =
+      mapping.namasteCode.toLowerCase().includes(term) ||
+      mapping.icd11Code.toLowerCase().includes(term) ||
+      mapping.namasteDescription.toLowerCase().includes(term) ||
+      mapping.icd11Description.toLowerCase().includes(term);
+    const matchesStatus = selectedStatus === "All Categories" || mapping.status === selectedStatus;
     return matchesSearch && matchesStatus;
   });
 
+  const statHighlights: Array<{
+    label: string;
+    value: string;
+    caption: string;
+    accent: string;
+    icon: LucideIcon;
+  }> = [
+    {
+      label: "Total Mappings",
+      value: "6,234",
+      caption: "Bridged therapeutic linkages",
+      accent: "bg-blue-50 border-blue-200 text-blue-700",
+      icon: Globe2,
+    },
+    {
+      label: "Approved Pathways",
+      value: "5,123",
+      caption: "Clinical governance aligned",
+      accent: "bg-green-50 border-green-200 text-green-700",
+      icon: ShieldCheck,
+    },
+    {
+      label: "Under Review",
+      value: "892",
+      caption: "Experts validating therapies",
+      accent: "bg-amber-50 border-amber-200 text-amber-700",
+      icon: Stethoscope,
+    },
+    {
+      label: "Avg. Confidence",
+      value: "89%",
+      caption: "Weighted by reviewer certainty",
+      accent: "bg-slate-50 border-slate-200 text-slate-700",
+      icon: Sparkles,
+    },
+  ];
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Approved': return 'bg-green-100 text-green-800';
-      case 'Under Review': return 'bg-yellow-100 text-yellow-800';
-      case 'Pending Review': return 'bg-blue-100 text-blue-800';
-      case 'Rejected': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "Approved":
+        return "bg-emerald-100 text-emerald-700";
+      case "Under Review":
+        return "bg-amber-100 text-amber-700";
+      case "Pending Review":
+        return "bg-indigo-100 text-indigo-700";
+      case "Rejected":
+        return "bg-rose-100 text-rose-700";
+      default:
+        return "bg-slate-100 text-slate-700";
     }
   };
 
   const getMappingTypeColor = (type: string) => {
     switch (type) {
-      case 'Exact Match': return 'bg-green-100 text-green-800';
-      case 'Close Match': return 'bg-yellow-100 text-yellow-800';
-      case 'Partial Match': return 'bg-orange-100 text-orange-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "Exact Match":
+        return "bg-emerald-100 text-emerald-700";
+      case "Close Match":
+        return "bg-amber-100 text-amber-700";
+      case "Partial Match":
+        return "bg-orange-100 text-orange-700";
+      default:
+        return "bg-slate-100 text-slate-700";
     }
   };
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 90) return 'text-green-600';
-    if (confidence >= 75) return 'text-yellow-600';
-    return 'text-red-600';
+    if (confidence >= 90) return "text-emerald-600";
+    if (confidence >= 75) return "text-amber-600";
+    return "text-rose-600";
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-8">
       <motion.div
-        className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0"
+        className="flex flex-col items-start justify-between space-y-4 sm:flex-row sm:items-center sm:space-y-0"
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35 }}
@@ -139,9 +206,9 @@ export function Mappings() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.35, delay: 0.05 }}
         >
-          <h1 className="text-2xl font-bold text-foreground">Code Mappings</h1>
-          <p className="text-muted-foreground">
-            Manage mappings between Namaste codes and ICD-11/TM2 classifications
+          <h1 className="text-2xl font-semibold text-slate-900">Code Mappings</h1>
+          <p className="text-sm text-slate-500">
+            Manage NAMASTE ↔ TM2/ICD-11 alignments, governance checks, and runtime confidence.
           </p>
         </motion.div>
 
@@ -149,130 +216,114 @@ export function Mappings() {
           initial={{ opacity: 0, x: 8 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.35, delay: 0.08 }}
+          className="flex items-center gap-2"
         >
+          <Button className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:border-green-300 hover:text-green-600">
+            <Download className="h-4 w-4" />
+            Export evidence
+          </Button>
           <motion.button
-            className="flex items-center space-x-2"
+            className="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-green-700"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.96 }}
-            transition={{ type: "spring", stiffness: 300 }}
+            transition={{ type: "spring", stiffness: 260 }}
           >
-            <Plus className="w-4 h-4" />
-            <span>Create Mapping</span>
+            <Plus className="h-4 w-4" />
+            Create mapping
           </motion.button>
         </motion.div>
       </motion.div>
 
-      {/* Search and Filters */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.25 }}
-      >
-        <Card>
-          <CardContent className="p-6 bg-blue-100 rounded-2xl">
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              {/* Search Box */}
-              <motion.div
-                className="flex-1 relative"
-                initial={{ opacity: 0, x: -12 }}
-                animate={{ opacity: 1, x: 0 }}
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <Input
-                  placeholder="Search mappings, codes, descriptions..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </motion.div>
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+        <Card className="border-none bg-transparent">
+          <CardContent className="flex flex-col space-y-4 rounded-lg bg-white border border-slate-200 p-6 shadow-sm sm:flex-row sm:space-y-0 sm:space-x-4">
+            <motion.div
+              className="relative flex-1"
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform text-slate-400" />
+              <Input
+                placeholder="Search mappings, codes, descriptions..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="rounded-2xl border-slate-200/70 bg-white/95 pl-10 text-sm shadow-sm shadow-amber-100/30"
+              />
+            </motion.div>
 
-              {/* Status Select */}
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  className="px-4 py-2 bg-blue-200 border rounded-md shadow-sm hover:bg-blue-300"
-                >
-                  {selectedStatus}
-                </DropdownMenuTrigger>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="rounded-full border border-slate-200/70 bg-white/90 px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:border-amber-300 hover:text-amber-600">
+                {selectedStatus}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="min-w-[200px] rounded-2xl border border-slate-200/70 bg-white/95 p-2 shadow-lg shadow-blue-100/40">
+                <DropdownMenuLabel className="px-3 py-1 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  Status filters
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="my-1 h-px bg-slate-200/60" />
+                {statuses.map((cat) => (
+                  <DropdownMenuItem
+                    key={cat}
+                    onClick={() => setSelectedStatus(cat)}
+                    className={`cursor-pointer rounded-xl px-3 py-2 text-sm transition hover:bg-amber-50 hover:text-amber-600 ${
+                      cat === selectedStatus ? "bg-amber-100/70 text-amber-700 font-semibold" : "text-slate-600"
+                    }`}
+                  >
+                    {cat}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-                <DropdownMenuContent
-                  className="min-w-[180px] bg-white border rounded-md shadow-lg p-2"
-                >
-                  <DropdownMenuLabel className="px-2 py-1 text-gray-700 font-medium">
-                    Categories
-                  </DropdownMenuLabel>
-
-                  <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
-
-                  {statuses.map((cat) => (
-                    <DropdownMenuItem
-                      key={cat}
-                      onClick={() => setSelectedStatus(cat)}
-                      className={`px-3 py-2 rounded-md text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-600 ${cat === selectedStatus ? "bg-blue-100 text-blue-700 font-semibold" : "text-gray-700"
-                        }`}
-                    >
-                      {cat}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-
-              {/* More Filters Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 300, delay: 0.08 }}
-              >
-                {/* wrap Button in motion.div so Button props/variants are preserved */}
-                <div className="inline-block">
-                  <Button variant="outline" className="flex items-center space-x-2 bg-blue-200 hover:bg-blue-300">
-                    <Filter className="w-4 h-4" />
-                    <span>More Filters</span>
-                  </Button>
-                </div>
-              </motion.div>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 300, delay: 0.08 }}
+            >
+              <Button className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 shadow-sm transition hover:border-green-300 hover:text-green-600">
+                <Filter className="h-4 w-4" />
+                More filters
+              </Button>
+            </motion.div>
           </CardContent>
         </Card>
       </motion.div>
 
-      {/* Stats Cards */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-4 gap-4"
+        className="grid grid-cols-1 gap-4 md:grid-cols-4"
         initial="hidden"
         animate="show"
-        variants={{
-          hidden: {},
-          show: {
-            transition: { staggerChildren: 0.1 } // cards appear one by one
-          }
-        }}
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08 } } }}
       >
-        {[
-          { label: "Total Mappings", value: "6,234", color: "text-foreground" },
-          { label: "Approved", value: "5,123", color: "text-green-600" },
-          { label: "Under Review", value: "892", color: "text-yellow-600" },
-          { label: "Avg. Confidence", value: "89%", color: "text-blue-600" },
-        ].map((stat, i) => (
+        {statHighlights.map((stat) => (
           <motion.div
-            key={i}
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              show: { opacity: 1, y: 0 }
-            }}
+            key={stat.label}
+            variants={{ hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0 } }}
             whileHover={{ scale: 1.04 }}
-            transition={{ duration: 0.3 }}
             whileTap={{ scale: 0.97 }}
           >
-            <Card>
-              <CardContent className="p-4 bg-white rounded-xl">
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                  <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
+            <Card className="border-none bg-transparent">
+              <CardContent className={`group relative overflow-hidden rounded-lg border bg-white p-5 shadow-sm ${stat.accent}`}>
+                <div className="absolute left-4 top-0 h-0.5 w-8 bg-green-500" />
+                <div className="relative flex items-start justify-between">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                      {stat.label}
+                    </p>
+                    <p className="mt-3 text-3xl font-semibold text-slate-900">
+                      {stat.value}
+                    </p>
+                  </div>
+                  <div className={`flex h-11 w-11 items-center justify-center rounded-lg border ${stat.accent}`}>
+                    <stat.icon className="h-5 w-5" />
+                  </div>
+                </div>
+                <div className="relative mt-4 flex items-center gap-2 text-xs font-medium text-slate-500">
+                  <span className="inline-flex h-1.5 w-1.5 rounded-full bg-green-500" />
+                  {stat.caption}
                 </div>
               </CardContent>
             </Card>
@@ -280,44 +331,53 @@ export function Mappings() {
         ))}
       </motion.div>
 
-      {/* Mapping Quality Overview */}
-      <Card>
+      <Card className="border-none bg-transparent">
         <CardHeader>
-          <CardTitle>Mapping Quality Overview</CardTitle>
+          <CardTitle className="text-lg font-semibold text-slate-900">Mapping Quality Overview</CardTitle>
         </CardHeader>
         <CardContent>
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-4"
+            className="grid grid-cols-1 gap-4 md:grid-cols-3"
             initial="hidden"
             animate="show"
-            variants={{
-              hidden: {},
-              show: { transition: { staggerChildren: 0.15 } },
-            }}
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.12 } } }}
           >
             {[
-              { label: "Exact Match", value: "3,245 (52%)", percent: 52, color: "bg-green-600" },
-              { label: "Close Match", value: "2,234 (36%)", percent: 36, color: "bg-yellow-600" },
-              { label: "Partial Match", value: "755 (12%)", percent: 12, color: "bg-orange-600" },
-            ].map((item, i) => (
+              {
+                label: "Exact Match",
+                value: "3,245 (52%)",
+                percent: 52,
+                color: "bg-green-500",
+                accent: "bg-green-50 border-green-200 text-green-700",
+              },
+              {
+                label: "Close Match",
+                value: "2,234 (36%)",
+                percent: 36,
+                color: "bg-amber-500",
+                accent: "bg-amber-50 border-amber-200 text-amber-700",
+              },
+              {
+                label: "Partial Match",
+                value: "755 (12%)",
+                percent: 12,
+                color: "bg-red-500",
+                accent: "bg-red-50 border-red-200 text-red-700",
+              },
+            ].map((item) => (
               <motion.div
-                key={i}
-                className="space-y-2"
-                variants={{
-                  hidden: { opacity: 0, y: 20 },
-                  show: { opacity: 1, y: 0 },
-                }}
-                transition={{ duration: 0.4 }}
+                key={item.label}
+                className={`group relative overflow-hidden rounded-lg border bg-white p-5 shadow-sm ${item.accent}`}
+                variants={{ hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0 } }}
               >
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">{item.label}</span>
-                  <span className="text-sm font-medium">{item.value}</span>
+                <div className="absolute left-4 top-0 h-0.5 w-8 bg-green-500" />
+                <div className="relative flex items-center justify-between text-sm text-slate-600">
+                  <span>{item.label}</span>
+                  <span className="font-semibold text-slate-900">{item.value}</span>
                 </div>
-
-                {/* Animated progress bar */}
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div className="relative mt-4 h-2 w-full overflow-hidden rounded-full bg-slate-200">
                   <motion.div
-                    className={`${item.color} h-2 rounded-full`}
+                    className={`${item.color} h-full rounded-full`}
                     initial={{ width: 0 }}
                     animate={{ width: `${item.percent}%` }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
@@ -329,14 +389,15 @@ export function Mappings() {
         </CardContent>
       </Card>
 
-      {/* Mappings Table */}
-      <Card className='bg-white/50'>
+      <Card className="border-none bg-transparent">
         <CardHeader>
-          <CardTitle>Code Mappings ({filteredMappings.length} results)</CardTitle>
+          <CardTitle className="text-lg font-semibold text-slate-900">
+            Code Mappings ({filteredMappings.length} results)
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <Table>
+        <CardContent className="rounded-3xl border border-white/70 bg-white/95 p-0 shadow-lg shadow-blue-100/30">
+          <div className="overflow-x-auto rounded-3xl">
+            <Table className="text-sm">
               <TableHeader>
                 <TableRow>
                   <TableHead>Namaste Code</TableHead>
@@ -350,60 +411,56 @@ export function Mappings() {
               </TableHeader>
               <TableBody>
                 {filteredMappings.map((mapping) => (
-                  <TableRow key={mapping.id}>
+                  <TableRow key={mapping.id} className="align-top">
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="font-mono font-medium">{mapping.namasteCode}</div>
-                        <div className="text-sm text-muted-foreground max-w-xs truncate">
-                          {mapping.namasteDescription}
-                        </div>
+                        <div className="font-mono font-medium text-slate-900">{mapping.namasteCode}</div>
+                        <div className="max-w-xs truncate text-sm text-slate-600">{mapping.namasteDescription}</div>
                       </div>
                     </TableCell>
                     <TableCell>
                       <div className="space-y-1">
-                        <div className="font-mono font-medium">{mapping.icd11Code}</div>
-                        <div className="text-sm text-muted-foreground max-w-xs truncate">
-                          {mapping.icd11Description}
-                        </div>
+                        <div className="font-mono font-medium text-slate-900">{mapping.icd11Code}</div>
+                        <div className="max-w-xs truncate text-sm text-slate-600">{mapping.icd11Description}</div>
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge className={getMappingTypeColor(mapping.mappingType)}>
+                      <Badge className={`${getMappingTypeColor(mapping.mappingType)} rounded-full px-3 py-1 text-xs font-semibold`}>
                         {mapping.mappingType}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <span className={`font-medium ${getConfidenceColor(mapping.confidence)}`}>
+                      <div className="flex items-center gap-2">
+                        <span className={`font-semibold ${getConfidenceColor(mapping.confidence)}`}>
                           {mapping.confidence}%
                         </span>
-                        {mapping.confidence >= 90 && <Check className="w-4 h-4 text-green-600" />}
-                        {mapping.confidence < 75 && <AlertCircle className="w-4 h-4 text-red-600" />}
+                        {mapping.confidence >= 90 && <Check className="h-4 w-4 text-emerald-600" />}
+                        {mapping.confidence < 75 && <AlertCircle className="h-4 w-4 text-rose-500" />}
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge className={getStatusColor(mapping.status)}>
+                      <Badge className={`${getStatusColor(mapping.status)} rounded-full px-3 py-1 text-xs font-semibold`}>
                         {mapping.status}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {mapping.reviewer || 'Unassigned'}
+                    <TableCell className="text-sm text-slate-500">
+                      {mapping.reviewer || "Unassigned"}
                     </TableCell>
                     <TableCell>
-                      <div className="flex space-x-2">
+                      <div className="flex items-center gap-2">
                         <Button variant="ghost" size="sm">
-                          <Eye className="w-4 h-4" />
+                          <Eye className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm">
-                          <Edit className="w-4 h-4" />
+                          <Edit className="h-4 w-4" />
                         </Button>
-                        {mapping.status === 'Pending Review' && (
+                        {mapping.status === "Pending Review" && (
                           <>
-                            <Button variant="ghost" size="sm" className="text-green-600">
-                              <Check className="w-4 h-4" />
+                            <Button variant="ghost" size="sm" className="text-emerald-600">
+                              <Check className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm" className="text-red-600">
-                              <X className="w-4 h-4" />
+                            <Button variant="ghost" size="sm" className="text-rose-600">
+                              <X className="h-4 w-4" />
                             </Button>
                           </>
                         )}

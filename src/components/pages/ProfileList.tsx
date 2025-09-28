@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Badge } from '../ui/badge';
 import { Textarea } from '../ui/textarea';
-import { Search, Filter, Plus, Eye, Edit, FileText, Calendar, User } from 'lucide-react';
+import { Search, Filter, Plus, Eye, Edit, FileText } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -72,7 +72,7 @@ export function ProfileList() {
           </p>
         </div>
         <motion.button
-          className="flex items-center space-x-2 btn btn-primary hover:bg-gray-200 rounded-md p-2"
+          className="flex items-center space-x-2 rounded-lg bg-green-600 px-4 py-2 text-white shadow-sm transition hover:bg-green-700"
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.95 }}
           transition={{ type: "spring", stiffness: 300 }}
@@ -84,7 +84,7 @@ export function ProfileList() {
 
       {/* Search and Filters */}
       <Card>
-        <CardContent className="p-6 bg-blue-100 rounded-2xl">
+        <CardContent className="p-6 bg-white rounded-lg border border-slate-200 shadow-sm">
           <motion.div
             className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4"
             initial={{ opacity: 0, x: -20 }}
@@ -112,11 +112,11 @@ export function ProfileList() {
             >
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="px-4 py-2 bg-blue-200 border rounded-md shadow-sm hover:bg-blue-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                  className="px-4 py-2 bg-white border border-slate-200 rounded-lg shadow-sm hover:border-green-300 hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-green-400"
                 >
                   {selectedStatus === 'all' ? 'All Statuses' : selectedStatus}
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="min-w-[180px] bg-white border rounded-md shadow-lg p-2">
+                <DropdownMenuContent className="min-w-[180px] bg-white border border-slate-200 rounded-lg shadow-lg p-2">
                   <DropdownMenuLabel className="px-2 py-1 text-gray-700 font-medium">
                     Categories
                   </DropdownMenuLabel>
@@ -125,9 +125,9 @@ export function ProfileList() {
                     <DropdownMenuItem
                       key={status}
                       onClick={() => setSelectedStatus(status)}
-                      className={`px-3 py-2 rounded-md text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-600 ${
+                      className={`px-3 py-2 rounded-lg text-sm cursor-pointer hover:bg-green-50 hover:text-green-600 ${
                         status === selectedStatus
-                          ? "bg-blue-100 text-blue-700 font-semibold"
+                          ? "bg-green-100 text-green-700 font-semibold"
                           : "text-gray-700"
                       }`}
                     >
@@ -138,7 +138,7 @@ export function ProfileList() {
               </DropdownMenu>
 
               <motion.button
-                className="flex items-center space-x-2 border rounded-md px-3 py-2 bg-blue-200 hover:bg-blue-300"
+                className="flex items-center space-x-2 border border-slate-200 rounded-lg px-3 py-2 bg-white hover:border-green-300 hover:text-green-600 shadow-sm"
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 300 }}
@@ -167,7 +167,7 @@ export function ProfileList() {
             transition={{ duration: 0.3, delay: index * 0.1 }}
           >
             <Card>
-              <CardContent className="p-4 bg-white rounded-xl">
+              <CardContent className="p-4 bg-white rounded-lg border border-slate-200 shadow-sm">
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                   <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>

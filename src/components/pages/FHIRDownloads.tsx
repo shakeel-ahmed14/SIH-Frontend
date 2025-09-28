@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
-import { Input } from '../ui/input';
 import { Badge } from '../ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Checkbox } from '../ui/checkbox';
@@ -10,8 +9,6 @@ import {
   Download, 
   File, 
   Database, 
-  Calendar, 
-  Filter,
   CheckCircle,
   Clock,
   AlertCircle,
@@ -171,7 +168,7 @@ export function FHIRDownloads() {
                   <div className="flex items-center space-x-2">
                     <Checkbox 
                       checked={includeNamaste}
-                      onCheckedChange={setIncludeNamaste}
+                      onCheckedChange={(checked) => setIncludeNamaste(checked === true)}
                     />
                     <label className="text-sm">Namaste Codes</label>
                   </div>
@@ -183,7 +180,7 @@ export function FHIRDownloads() {
                   <div className="flex items-center space-x-2">
                     <Checkbox 
                       checked={includeICD11}
-                      onCheckedChange={setIncludeICD11}
+                      onCheckedChange={(checked) => setIncludeICD11(checked === true)}
                     />
                     <label className="text-sm">ICD-11/TM2 Codes</label>
                   </div>
@@ -195,7 +192,7 @@ export function FHIRDownloads() {
                   <div className="flex items-center space-x-2">
                     <Checkbox 
                       checked={includeMappings}
-                      onCheckedChange={setIncludeMappings}
+                      onCheckedChange={(checked) => setIncludeMappings(checked === true)}
                     />
                     <label className="text-sm">Code Mappings</label>
                   </div>
@@ -207,7 +204,7 @@ export function FHIRDownloads() {
                   <div className="flex items-center space-x-2">
                     <Checkbox 
                       checked={includePatients}
-                      onCheckedChange={setIncludePatients}
+                      onCheckedChange={(checked) => setIncludePatients(checked === true)}
                     />
                     <label className="text-sm">Patient Records</label>
                   </div>

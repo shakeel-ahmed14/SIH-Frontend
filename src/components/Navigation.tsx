@@ -38,8 +38,8 @@ interface SidebarNavProps {
 
 /* Framer Motion variants */
 const sidebarVariants: Variants = {
-  open: { width: 261, transition: { type: "spring", stiffness: 250, damping: 30 } }, // w-56 = 224px
-  closed: { width: 64, transition: { type: "spring", stiffness: 300, damping: 35 } }, // w-16 = 64px
+  open: { width: 264, transition: { type: "spring", stiffness: 240, damping: 28 } },
+  closed: { width: 72, transition: { type: "spring", stiffness: 300, damping: 32 } },
 };
 
 const logoTextVariants: Variants = {
@@ -112,7 +112,7 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
         <button
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           onClick={() => setMobileOpen((s) => !s)}
-          className="p-2 rounded-md bg-base-200 text-foreground shadow-sm"
+          className="p-2 rounded-md bg-white/90 text-slate-700 shadow-md ring-1 ring-slate-200 backdrop-blur"
         >
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -120,43 +120,35 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
 
       {/* Left vertical bar for md+ (collapsible) */}
       <motion.aside
-        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden bg-blue-300/40 m-5 mr-0 rounded-lg"
+        className="hidden md:flex flex-col top-0 left-0 min-h-screen z-40 ease-in-out bg-white border border-slate-200 shadow-sm overflow-hidden m-6 mr-0 rounded-lg"
         initial={false}
         animate={open ? "open" : "closed"}
         variants={sidebarVariants}
         style={{ minWidth: 64 }} // ensure minimum so layout doesn't collapse
       >
         {/* Logo + toggle */}
-        <div className="flex items-center justify-center h-16 px-3">
+        <div className="flex items-center justify-center h-20 px-4 border-b border-slate-200 bg-white">
           {open ? (
-            <>
-              <div className="flex items-center space-x-2 min-w-0 flex-1">
+            <div className="flex items-center justify-center w-full">
+              <div className="flex items-center space-x-2">
                 <img
                   src={pancakeLogo}
-                  alt="Logo"
-                  className="w-8 h-8 object-contain flex-shrink-0 filter invert"
+                  alt="AyushVardhan logo"
+                  className="w-9 h-9 object-contain flex-shrink-0"
                 />
                 <motion.span
-                  className="whitespace-nowrap overflow-hidden text-black font-semibold text-sm"
+                  className="text-slate-700 font-semibold text-base"
                   variants={logoTextVariants}
                 >
-                  AyushVardhan
+                  AyushVardhan Console
                 </motion.span>
               </div>
-
-              <button
-                aria-label="Collapse sidebar"
-                onClick={() => setOpen(false)}
-                className="p-1 rounded hover:bg-base-200 flex-shrink-0"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </>
+            </div>
           ) : (
             <button
               aria-label="Expand sidebar"
               onClick={() => setOpen(true)}
-              className="p-2 rounded hover:bg-base-200"
+              className="p-2 rounded-lg hover:bg-slate-100 text-slate-600"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -165,7 +157,7 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
 
         <motion.nav className="flex-1 overflow-y-auto" initial={false} animate={open ? "open" : "closed"}>
           <motion.ul
-            className="py-2 space-y-1 overflow-hidden" variants={navListVariants} role="list"
+            className="py-4 space-y-1 overflow-hidden" variants={navListVariants} role="list"
           >
             {NAV_ITEMS.map((item) => {
               const active = currentPage === item.id;
@@ -176,13 +168,12 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
                     onClick={() => handleClick(item.id)}
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`group w-full flex items-center gap-3 pl-4 py-2 text-sm transition-colors rounded-md
-                      ${active ? "text-white" : "text-black hover:text-black"}
+                    className={`group w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium transition-all rounded-lg
                       ${open ? "justify-start" : "justify-center"}
-                      ${currentPage === item.id ? "bg-black/70 text-black" : "hover:bg-black/10"}`}
+                      ${active ? "bg-slate-600 text-white shadow-sm" : "text-slate-600 hover:bg-slate-50 hover:text-slate-800"}`}
                     aria-current={active ? "page" : undefined}
                   >
-                    <Icon className={`w-5 h-5 ${active ? "text-white" : "text-black group-hover:text-black"}`} />
+                    <Icon className={`w-5 h-5 ${active ? "text-white" : "text-slate-500 group-hover:text-green-600"}`} />
                     {open && <span className="truncate">{item.label}</span>}
                   </motion.button>
                 </motion.li>
@@ -191,9 +182,15 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
           </motion.ul>
         </motion.nav>
 
-        <div className="px-3 py-4 border-base-200">
+        <div className="px-4 py-5 border-t border-slate-200 bg-white">
           <motion.div initial={false} animate={open ? "open" : "closed"} variants={logoTextVariants}>
-            {open ? <div className="text-xs text-gray-500">v1.0 • Signed in</div> : <div className="text-center text-xs text-gray-500">v1.0</div>}
+            {open ? (
+              <div className="text-xs text-slate-500">
+                v1.0 &bull; Connected
+              </div>
+            ) : (
+              <div className="text-center text-xs text-slate-500">v1.0</div>
+            )}
           </motion.div>
         </div>
       </motion.aside>
@@ -215,16 +212,16 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
         {/* drawer */}
         <motion.div
           ref={drawerRef}
-          className="absolute left-0 top-0 bottom-0 w-72 bg-base-100 shadow-lg"
+          className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl"
           initial="closed"
           animate={mobileOpen ? "open" : "closed"}
           variants={mobileDrawerVariants}
           role="dialog"
           aria-modal="true"
         >
-          <div className="flex items-center justify-between h-16 px-4 border-b border-base-200">
-            <div className="font-semibold">Code Mapping Portal</div>
-            <button aria-label="Close" onClick={() => setMobileOpen(false)} className="p-1 rounded hover:bg-base-200">
+          <div className="flex items-center justify-between h-16 px-4 border-b border-slate-200">
+            <div className="font-semibold text-slate-700">Code Mapping Portal</div>
+            <button aria-label="Close" onClick={() => setMobileOpen(false)} className="p-1 rounded-lg hover:bg-green-50 hover:text-green-600 text-slate-500">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -239,8 +236,8 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
                     <motion.button
                       onClick={() => handleClick(item.id)}
                       whileHover={{ x: 6 }}
-                      className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md
-                        ${active ? "bg-primary text-primary-foreground" : "hover:bg-base-200"}`}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg font-medium
+                        ${active ? "bg-green-600 text-white" : "text-slate-600 hover:bg-green-50 hover:text-green-700"}`}
                     >
                       <Icon className="w-5 h-5" />
                       <span>{item.label}</span>

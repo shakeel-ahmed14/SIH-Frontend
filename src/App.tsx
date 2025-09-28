@@ -1,46 +1,42 @@
-import React, { useState } from 'react';
-// import { Layout } from './components/Layout';
-import { Navigation } from './components/Navigation';
-import { Dashboard } from './components/Dashboard';
-import { NamasteCodes } from './components/pages/NamasteCodes';
-import { TM2Codes } from './components/pages/TM2Codes';
-import { Mappings } from './components/pages/Mappings';
-import { ProfileList } from './components/pages/ProfileList';
-import { FHIRDownloads } from './components/pages/FHIRDownloads';
-import { AdminPage } from './components/pages/AdminPage';
-import { HelpPage } from './components/pages/HelpPage';
-import { SettingsPage } from './components/pages/SettingsPage';
-import Landing from './components/Landing';
-import Spline from '@splinetool/react-spline';
+import { useState } from "react";
+import { Navigation } from "./components/Navigation";
+import { Dashboard } from "./components/Dashboard";
+import { NamasteCodes } from "./components/pages/NamasteCodes";
+import { TM2Codes } from "./components/pages/TM2Codes";
+import { Mappings } from "./components/pages/Mappings";
+import { ProfileList } from "./components/pages/ProfileList";
+import { FHIRDownloads } from "./components/pages/FHIRDownloads";
+import { AdminPage } from "./components/pages/AdminPage";
+import { HelpPage } from "./components/pages/HelpPage";
+import { SettingsPage } from "./components/pages/SettingsPage";
+import Landing from "./components/Landing";
 
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('landing');
+  const [currentPage, setCurrentPage] = useState("landing");
   const [sidebarOpen, setSidebarOpen] = useState(true);
-
-
 
   const renderCurrentPage = () => {
     switch (currentPage) {
-      case 'landing':
+      case "landing":
         return <Landing onNavigate={setCurrentPage} />;
-      case 'home':
+      case "home":
         return <Dashboard />;
-      case 'namaste-codes':
+      case "namaste-codes":
         return <NamasteCodes />;
-      case 'tm2-codes':
+      case "tm2-codes":
         return <TM2Codes />;
-      case 'mappings':
+      case "mappings":
         return <Mappings />;
-      case 'profiles':
+      case "profiles":
         return <ProfileList />;
-      case 'downloads':
+      case "downloads":
         return <FHIRDownloads />;
-      case 'admin':
+      case "admin":
         return <AdminPage />;
-      case 'help':
+      case "help":
         return <HelpPage />;
-      case 'settings':
+      case "settings":
         return <SettingsPage />;
       default:
         return <Dashboard onNavigate={setCurrentPage} />;
@@ -48,39 +44,40 @@ export default function App() {
   };
 
   return (
-    <>
-      <div className="relative min-h-screen flex text-foreground antialiased">
-        {/* Blurred background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center filter blur-md z-0"
-          style={{ backgroundImage: "url('/8748538-4k-minimalist-blue-wallpaper.jpg')" }}
-        ></div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#f6f5fb] via-[#fdf8f1] to-[#edf2ff] text-slate-900">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_12%_18%,_rgba(34,94,201,0.14),_transparent_58%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_88%_12%,_rgba(250,209,150,0.18),_transparent_60%)]" />
 
-        <div className="absolute inset-0 bg-black/20"></div>  {/* black tint with 20% opacity */}
+      <div className="relative flex min-h-screen">
+        {currentPage !== "landing" && (
+          <Navigation
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            onToggle={setSidebarOpen}
+          />
+        )}
 
-        {/* Content */}
-        <div className="relative z-10 flex w-full">
-          {currentPage !== "landing" && (
-            <Navigation
-              currentPage={currentPage}
-              onPageChange={setCurrentPage}
-              onToggle={setSidebarOpen}
-            />
-          )}
-
-          <main
+        <main
+          className={
+            currentPage !== "landing"
+              ? `flex-1 transition-all duration-300 ease-out ${
+                  sidebarOpen ? "md:ml-0" : ""
+                }`
+              : "flex-1"
+          }
+        >
+          <div
             className={
               currentPage !== "landing"
-                ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? "container max-w-full m-5" : "w-full m-5"} m-2 rounded-lg bg-blue-200/50`
-                : "flex-1 min-h-screen"
+                ? "mx-auto w-full max-w-6xl px-4 py-10 sm:px-8"
+                : ""
             }
           >
             {renderCurrentPage()}
-          </main>
-        </div>
+          </div>
+        </main>
       </div>
-
-    </>
+    </div>
   );
 
 }

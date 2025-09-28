@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -13,12 +13,11 @@ import {
   Activity, 
   Database,
   Eye,
+  User,
   Settings,
   AlertTriangle,
   CheckCircle,
   Clock,
-  User,
-  FileText,
   Edit,
   Trash2
 } from 'lucide-react';
@@ -215,68 +214,110 @@ export function AdminPage() {
       </div>
 
       {/* System Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">Active Users</p>
-              <p className="text-xl font-bold text-green-600">{systemStats.activeUsers}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+        <Card className="bg-white border border-slate-200 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-500">Active Users</p>
+                <p className="text-3xl font-bold text-green-600">{systemStats.activeUsers}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 border border-green-200">
+                <Users className="h-6 w-6 text-green-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">Total Sessions</p>
-              <p className="text-xl font-bold">{systemStats.totalSessions}</p>
+        
+        <Card className="bg-white border border-slate-200 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-500">Total Sessions</p>
+                <p className="text-3xl font-bold text-slate-900">{systemStats.totalSessions}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 border border-blue-200">
+                <Activity className="h-6 w-6 text-blue-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">Failed Logins</p>
-              <p className="text-xl font-bold text-red-600">{systemStats.failedLogins}</p>
+        
+        <Card className="bg-white border border-slate-200 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-500">Failed Logins</p>
+                <p className="text-3xl font-bold text-red-600">{systemStats.failedLogins}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-red-50 border border-red-200">
+                <AlertTriangle className="h-6 w-6 text-red-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
-            <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">Uptime</p>
-              <p className="text-xl font-bold text-green-600">{systemStats.systemUptime}</p>
+        
+        <Card className="bg-white border border-slate-200 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <p className="text-sm font-medium text-slate-500">System Uptime</p>
+                <p className="text-3xl font-bold text-green-600">{systemStats.systemUptime}</p>
+              </div>
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-50 border border-green-200">
+                <Shield className="h-6 w-6 text-green-600" />
+              </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
+      </div>
+
+      {/* Secondary Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="bg-white border border-slate-200 shadow-sm">
+          <CardContent className="p-6">
             <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">Response Time</p>
-              <p className="text-xl font-bold">{systemStats.avgResponseTime}</p>
+              <p className="text-sm font-medium text-slate-500">Response Time</p>
+              <p className="text-2xl font-bold text-slate-900">{systemStats.avgResponseTime}</p>
+              <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="bg-blue-600 h-2 rounded-full" style={{width: '20%'}}></div>
+              </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
+        
+        <Card className="bg-white border border-slate-200 shadow-sm">
+          <CardContent className="p-6">
             <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">Disk Usage</p>
-              <p className="text-xl font-bold text-yellow-600">{systemStats.diskUsage}%</p>
+              <p className="text-sm font-medium text-slate-500">Disk Usage</p>
+              <p className="text-2xl font-bold text-orange-600">{systemStats.diskUsage}%</p>
+              <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="bg-orange-600 h-2 rounded-full" style={{width: '68%'}}></div>
+              </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
+        
+        <Card className="bg-white border border-slate-200 shadow-sm">
+          <CardContent className="p-6">
             <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">Memory</p>
-              <p className="text-xl font-bold">{systemStats.memoryUsage}%</p>
+              <p className="text-sm font-medium text-slate-500">Memory Usage</p>
+              <p className="text-2xl font-bold text-slate-900">{systemStats.memoryUsage}%</p>
+              <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="bg-slate-600 h-2 rounded-full" style={{width: '45%'}}></div>
+              </div>
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="p-4">
+        
+        <Card className="bg-white border border-slate-200 shadow-sm">
+          <CardContent className="p-6">
             <div className="space-y-2">
-              <p className="text-xs text-muted-foreground">CPU Usage</p>
-              <p className="text-xl font-bold">{systemStats.cpuUsage}%</p>
+              <p className="text-sm font-medium text-slate-500">CPU Usage</p>
+              <p className="text-2xl font-bold text-slate-900">{systemStats.cpuUsage}%</p>
+              <div className="w-full bg-slate-200 rounded-full h-2">
+                <div className="bg-blue-600 h-2 rounded-full" style={{width: '32%'}}></div>
+              </div>
             </div>
           </CardContent>
         </Card>
