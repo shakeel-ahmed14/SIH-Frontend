@@ -13,6 +13,8 @@ import {
   HeartHandshake,
 } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
+import pancakeLogo from "../images/pancakes.png";
+
 
 type NavItem = { id: string; label: string; Icon: React.FC<any> };
 
@@ -31,17 +33,18 @@ const NAV_ITEMS: NavItem[] = [
 interface SidebarNavProps {
   currentPage?: string;
   onPageChange?: (id: string) => void;
+  onToggle?: (open: boolean) => void;
 }
 
 /* Framer Motion variants */
 const sidebarVariants: Variants = {
-  open: { width: 224, transition: { type: "spring", stiffness: 250, damping: 30 } }, // w-56 = 224px
+  open: { width: 261, transition: { type: "spring", stiffness: 250, damping: 30 } }, // w-56 = 224px
   closed: { width: 64, transition: { type: "spring", stiffness: 300, damping: 35 } }, // w-16 = 64px
 };
 
 const logoTextVariants: Variants = {
   open: { opacity: 1, x: 0, transition: { duration: 0.18 } },
-  closed: { opacity: 1, x: -6, transition: { duration: 0.12 } },
+  closed: { opacity: 0, x: -20, transition: { duration: 0.12 } },
 };
 
 const navListVariants: Variants = {
@@ -59,10 +62,17 @@ const mobileDrawerVariants: Variants = {
   closed: { x: "-100%", transition: { type: "tween", duration: 0.24 } },
 };
 
-export function Navigation({ currentPage = "home", onPageChange }: SidebarNavProps) {
+
+export function Navigation({ currentPage = "home", onPageChange, onToggle }: SidebarNavProps) {
   const [open, setOpen] = useState<boolean>(true); // desktop expanded by default
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const drawerRef = useRef<HTMLDivElement | null>(null);
+
+  // After open state is defined
+  useEffect(() => {
+    if (onToggle) onToggle(open);
+  }, [open, onToggle]);
+
 
   // Close mobile drawer on Escape
   useEffect(() => {
@@ -93,6 +103,8 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
     setMobileOpen(false);
   };
 
+
+
   return (
     <>
       {/* Hamburger for small screens (top-left) */}
@@ -108,39 +120,52 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
 
       {/* Left vertical bar for md+ (collapsible) */}
       <motion.aside
-        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden"
+        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden bg-blue-300/40 m-5 mr-0 rounded-lg"
         initial={false}
         animate={open ? "open" : "closed"}
         variants={sidebarVariants}
         style={{ minWidth: 64 }} // ensure minimum so layout doesn't collapse
       >
         {/* Logo + toggle */}
-        <div className={open ? "flex items-center justify-between h-16 pr-15 gap-0" : "gap-0 pb-7 pt-3"}>
-          <div className="flex items-center space-x-2 pl-3">
-            <div className="rounded-md px-2 py-1 bg-primary text-primary-foreground font-semibold flex items-center">
-              
-              <motion.span
-                className={open ? "whitespace-nowrap overflow-hidden flex align-center justify-center" : "gap-0"}
-                variants={logoTextVariants}
-                aria-hidden={!open}
-              >
-                {open ? "🌿Ayush Vardhan" : ""}
-              </motion.span>
-            </div>
-          </div>
+        <div className="flex items-center justify-center h-16 px-3">
+          {open ? (
+            <>
+              <div className="flex items-center space-x-2 min-w-0 flex-1">
+                <img
+                  src={pancakeLogo}
+                  alt="Logo"
+                  className="w-8 h-8 object-contain flex-shrink-0 filter invert"
+                />
+                <motion.span
+                  className="whitespace-nowrap overflow-hidden text-black font-semibold text-sm"
+                  variants={logoTextVariants}
+                >
+                  AyushVardhan
+                </motion.span>
+              </div>
 
-          <button
-            aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
-            onClick={() => setOpen((s) => !s)}
-            className="p-1 rounded hover:bg-base-200 mr-2 pl-6"
-          >
-            {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
-          </button>
+              <button
+                aria-label="Collapse sidebar"
+                onClick={() => setOpen(false)}
+                className="p-1 rounded hover:bg-base-200 flex-shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </>
+          ) : (
+            <button
+              aria-label="Expand sidebar"
+              onClick={() => setOpen(true)}
+              className="p-2 rounded hover:bg-base-200"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+          )}
         </div>
 
         <motion.nav className="flex-1 overflow-y-auto" initial={false} animate={open ? "open" : "closed"}>
-          <motion.ul 
-          className="py-2 space-y-1 overflow-hidden" variants={navListVariants} role="list"
+          <motion.ul
+            className="py-2 space-y-1 overflow-hidden" variants={navListVariants} role="list"
           >
             {NAV_ITEMS.map((item) => {
               const active = currentPage === item.id;
@@ -151,13 +176,13 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
                     onClick={() => handleClick(item.id)}
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`w-full flex items-center gap-3 pl-4 py-2 text-sm transition-colors rounded-r-md
-                      ${active ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-base-200"}
+                    className={`group w-full flex items-center gap-3 pl-4 py-2 text-sm transition-colors rounded-md
+                      ${active ? "text-white" : "text-black hover:text-black"}
                       ${open ? "justify-start" : "justify-center"}
-                      ${currentPage === item.id ? "bg-zinc-700 text-white" : "hover:bg-zinc-300"}`}
+                      ${currentPage === item.id ? "bg-black/70 text-black" : "hover:bg-black/10"}`}
                     aria-current={active ? "page" : undefined}
                   >
-                    <Icon className={`w-5 h-5 ${active ? "" : "text-muted-foreground"}`} />
+                    <Icon className={`w-5 h-5 ${active ? "text-white" : "text-black group-hover:text-black"}`} />
                     {open && <span className="truncate">{item.label}</span>}
                   </motion.button>
                 </motion.li>
@@ -175,16 +200,15 @@ export function Navigation({ currentPage = "home", onPageChange }: SidebarNavPro
 
       {/* Mobile drawer (overlay) */}
       <div
-        className={`fixed inset-0 z-40 md:hidden pointer-events-none transition-opacity duration-200 ${
-          mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-100"
-        }`}
+        className={`fixed inset-0 z-40 md:hidden pointer-events-none transition-opacity duration-200 ${mobileOpen ? "opacity-100 pointer-events-auto" : "opacity-0"
+          }`}
         aria-hidden={!mobileOpen}
       >
         {/* overlay */}
         <motion.div
           className="absolute inset-0 bg-black/40"
-          initial={{ opacity: 100 }}
-          animate={{ opacity: mobileOpen ? 1 : 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: mobileOpen ? 1 : 0 }}
           onClick={() => setMobileOpen(false)}
         />
 

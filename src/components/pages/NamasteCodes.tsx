@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -6,11 +6,35 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../ui/badge';
 import { Search, Filter, Plus, Eye, Edit, Trash2 } from 'lucide-react';
 import { motion } from "framer-motion";
-import { AnimatedDropdown } from '../ui/AnimatedDropdown';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
 
 export function NamasteCodes() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [open, setOpen] = useState(false);
+  const closeTimer = useRef<number | null>(null);
+  const HOVER_CLOSE_DELAY = 150; // ms
+
+  function handleMouseEnter() {
+    if (closeTimer.current) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setOpen(true);
+  }
+
+  function handleMouseLeave() {
+    closeTimer.current = window.setTimeout(() => {
+      setOpen(false);
+    }, HOVER_CLOSE_DELAY);
+  }
 
   // Mock data for Namaste codes
   const namasteCodesData = [
@@ -79,6 +103,8 @@ export function NamasteCodes() {
     }
   };
 
+
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -101,7 +127,7 @@ export function NamasteCodes() {
       </div>
 
       <Card>
-        <CardContent className="p-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+        <CardContent className="p-6 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 bg-blue-100 rounded-xl">
           {/* Search Box */}
           <motion.div
             className="flex-1 relative"
@@ -120,11 +146,39 @@ export function NamasteCodes() {
           </motion.div>
 
           {/* Category Select */}
-          <AnimatedDropdown
+          {/* <AnimatedDropdown
             options={categories}
             selected={selectedCategory}
             onSelect={(val) => setSelectedCategory(val)}
-          />
+          /> */}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className="px-4 py-2 bg-blue-200 border rounded-md shadow-sm hover:bg-blue-300 focus:outline-none"
+            >
+              {selectedCategory}
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              className="min-w-[180px] bg-white border rounded-md shadow-lg p-2"
+            >
+              <DropdownMenuLabel className="px-2 py-1 text-gray-700 font-medium">
+                Categories
+              </DropdownMenuLabel>
+
+              <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
+
+              {categories.map((cat) => (
+                <DropdownMenuItem
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3 py-2 rounded-md text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-600 ${cat === selectedCategory ? "bg-blue-100 text-blue-700 font-semibold" : "text-gray-700"
+                    }`}
+                >
+                  {cat}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
 
 
@@ -137,7 +191,7 @@ export function NamasteCodes() {
             whileTap={{ scale: 0.97 }}
             transition={{ type: "spring", stiffness: 300, delay: 0.08 }}
           >
-            <Button variant="outline" className="flex items-center space-x-2">
+            <Button variant="outline" className="flex items-center space-x-2 bg-blue-200 hover:bg-blue-300">
               <Filter className="w-4 h-4" />
               <span>More Filters</span>
             </Button>
@@ -153,7 +207,7 @@ export function NamasteCodes() {
           { label: "Under Review", value: "892", color: "text-yellow-600" },
           { label: "Mapped", value: "8,456", color: "text-blue-600" },
         ].map((stat, index) => (
-          <motion.div
+          <motion.div 
             key={index}
             whileHover={{ scale: 1.04 }}
             initial={{ opacity: 0, y: 20 }}
@@ -162,7 +216,7 @@ export function NamasteCodes() {
             whileTap={{ scale: 0.97 }}
           >
             <Card>
-              <CardContent className="p-4">
+              <CardContent className="p-4 bg-white rounded-xl">
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                   <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
@@ -174,7 +228,7 @@ export function NamasteCodes() {
       </div>
 
       {/* Codes Table */}
-      <Card>
+      <Card className='bg-white/60'>
         <CardHeader>
           <CardTitle>Namaste Codes ({filteredCodes.length} results)</CardTitle>
         </CardHeader>

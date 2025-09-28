@@ -10,14 +10,22 @@ import { FHIRDownloads } from './components/pages/FHIRDownloads';
 import { AdminPage } from './components/pages/AdminPage';
 import { HelpPage } from './components/pages/HelpPage';
 import { SettingsPage } from './components/pages/SettingsPage';
+import Landing from './components/Landing';
+import Spline from '@splinetool/react-spline';
+
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState('landing');
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+
 
   const renderCurrentPage = () => {
     switch (currentPage) {
+      case 'landing':
+        return <Landing onNavigate={setCurrentPage} />;
       case 'home':
-        return <Dashboard onNavigate={setCurrentPage} />;
+        return <Dashboard />;
       case 'namaste-codes':
         return <NamasteCodes />;
       case 'tm2-codes':
@@ -40,14 +48,39 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#eeeeee] text-foreground antialiased">
-      <Navigation 
-        currentPage={currentPage} 
-        onPageChange={setCurrentPage} 
-      />
-      <main className="container mx-auto px-4 py-8 max-w-7xl">
-        {renderCurrentPage()}
-      </main>
-    </div>
+    <>
+      <div className="relative min-h-screen flex text-foreground antialiased">
+        {/* Blurred background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center filter blur-md z-0"
+          style={{ backgroundImage: "url('/8748538-4k-minimalist-blue-wallpaper.jpg')" }}
+        ></div>
+
+        <div className="absolute inset-0 bg-black/20"></div>  {/* black tint with 20% opacity */}
+
+        {/* Content */}
+        <div className="relative z-10 flex w-full">
+          {currentPage !== "landing" && (
+            <Navigation
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              onToggle={setSidebarOpen}
+            />
+          )}
+
+          <main
+            className={
+              currentPage !== "landing"
+                ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? "container max-w-full m-5" : "w-full m-5"} m-2 rounded-lg bg-blue-200/50`
+                : "flex-1 min-h-screen"
+            }
+          >
+            {renderCurrentPage()}
+          </main>
+        </div>
+      </div>
+
+    </>
   );
+
 }

@@ -7,10 +7,18 @@ import { Badge } from '../ui/badge';
 import { Search, Filter, Plus, Eye, Edit, ArrowRight, Check, X, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AnimatedDropdown } from '../ui/AnimatedDropdown';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
 
 export function Mappings() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState('All Categories');
 
   // Mock data for code mappings
   const mappingsData = [
@@ -81,14 +89,14 @@ export function Mappings() {
     }
   ];
 
-  const statuses = ['all', 'Approved', 'Under Review', 'Pending Review', 'Rejected'];
+  const statuses = ['All Categories', 'Approved', 'Under Review', 'Pending Review', 'Rejected'];
 
   const filteredMappings = mappingsData.filter(mapping => {
     const matchesSearch = mapping.namasteCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
       mapping.icd11Code.toLowerCase().includes(searchTerm.toLowerCase()) ||
       mapping.namasteDescription.toLowerCase().includes(searchTerm.toLowerCase()) ||
       mapping.icd11Description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === 'all' || mapping.status === selectedStatus;
+    const matchesStatus = selectedStatus === 'All Categories' || mapping.status === selectedStatus;
     return matchesSearch && matchesStatus;
   });
 
@@ -161,7 +169,7 @@ export function Mappings() {
         transition={{ duration: 0.25 }}
       >
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-6 bg-blue-100 rounded-2xl">
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               {/* Search Box */}
               <motion.div
@@ -181,20 +189,34 @@ export function Mappings() {
               </motion.div>
 
               {/* Status Select */}
-              <AnimatedDropdown
-                options={statuses.map(s => s === "all" ? "All Statuses" : s)}
-                selected={
-                  statuses.find(s => s === selectedStatus) === "all"
-                    ? "All Statuses"
-                    : selectedStatus
-                }
-                onSelect={(value) => {
-                  // Map back to internal key if needed
-                  const mapped =
-                    value === "All Statuses" ? "all" : value;
-                  setSelectedStatus(mapped);
-                }}
-              />
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className="px-4 py-2 bg-blue-200 border rounded-md shadow-sm hover:bg-blue-300"
+                >
+                  {selectedStatus}
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent
+                  className="min-w-[180px] bg-white border rounded-md shadow-lg p-2"
+                >
+                  <DropdownMenuLabel className="px-2 py-1 text-gray-700 font-medium">
+                    Categories
+                  </DropdownMenuLabel>
+
+                  <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
+
+                  {statuses.map((cat) => (
+                    <DropdownMenuItem
+                      key={cat}
+                      onClick={() => setSelectedStatus(cat)}
+                      className={`px-3 py-2 rounded-md text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-600 ${cat === selectedStatus ? "bg-blue-100 text-blue-700 font-semibold" : "text-gray-700"
+                        }`}
+                    >
+                      {cat}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
 
 
               {/* More Filters Button */}
@@ -207,7 +229,7 @@ export function Mappings() {
               >
                 {/* wrap Button in motion.div so Button props/variants are preserved */}
                 <div className="inline-block">
-                  <Button variant="outline" className="flex items-center space-x-2">
+                  <Button variant="outline" className="flex items-center space-x-2 bg-blue-200 hover:bg-blue-300">
                     <Filter className="w-4 h-4" />
                     <span>More Filters</span>
                   </Button>
@@ -247,7 +269,7 @@ export function Mappings() {
             whileTap={{ scale: 0.97 }}
           >
             <Card>
-              <CardContent className="p-4">
+              <CardContent className="p-4 bg-white rounded-xl">
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                   <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
@@ -308,7 +330,7 @@ export function Mappings() {
       </Card>
 
       {/* Mappings Table */}
-      <Card>
+      <Card className='bg-white/50'>
         <CardHeader>
           <CardTitle>Code Mappings ({filteredMappings.length} results)</CardTitle>
         </CardHeader>
