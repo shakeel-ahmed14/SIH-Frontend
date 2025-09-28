@@ -178,7 +178,7 @@
     /* allow clicks to pass through */
     user-select: none !important;
     touch-action: none !important;
-    transform: scale(1.15);
+    transform: scale(1.19);
     /* increase number to make waves bigger */
     transform-origin: center;
   }
