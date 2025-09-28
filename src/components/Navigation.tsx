@@ -36,7 +36,7 @@ interface SidebarNavProps {
 
 /* Framer Motion variants */
 const sidebarVariants: Variants = {
-  open: { width: 224, transition: { type: "spring", stiffness: 250, damping: 30 } }, // w-56 = 224px
+  open: { width: 261, transition: { type: "spring", stiffness: 250, damping: 30 } }, // w-56 = 224px
   closed: { width: 64, transition: { type: "spring", stiffness: 300, damping: 35 } }, // w-16 = 64px
 };
 
@@ -118,7 +118,7 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
 
       {/* Left vertical bar for md+ (collapsible) */}
       <motion.aside
-        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden bg-white m-2 rounded-lg"
+        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden bg-white m-5 mr-0 rounded-lg"
         initial={false}
         animate={open ? "open" : "closed"}
         variants={sidebarVariants}

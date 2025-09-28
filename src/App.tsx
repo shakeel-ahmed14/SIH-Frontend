@@ -59,9 +59,9 @@ export default function App() {
         <main
           className={
             currentPage !== "landing"
-              ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? "container mx-auto max-w-7xl" : "w-full"
+              ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? "container max-w-full m-5" : "w-full m-5"
               } m-2 rounded-lg bg-white`
-              : "container"
+              : "flex-1 min-h-scree"
           }
         >
           {renderCurrentPage()}

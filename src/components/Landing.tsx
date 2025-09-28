@@ -10,7 +10,7 @@ interface LandingProps {
 
 const Landing: React.FC<LandingProps> = ({ onNavigate }) => {
   return (
-    <div className="product-container">
+    <div className="product-container w-full">
       {/* Background */}
       <div className="background-spline">
         <Spline scene="https://prod.spline.design/X3eEwWfsat5SfMSW/scene.splinecode" />

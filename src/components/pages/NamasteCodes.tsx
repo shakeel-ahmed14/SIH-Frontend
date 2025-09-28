@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -6,11 +6,35 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../ui/badge';
 import { Search, Filter, Plus, Eye, Edit, Trash2 } from 'lucide-react';
 import { motion } from "framer-motion";
-import { AnimatedDropdown } from '../ui/AnimatedDropdown';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
 
 export function NamasteCodes() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [open, setOpen] = useState(false);
+  const closeTimer = useRef<number | null>(null);
+  const HOVER_CLOSE_DELAY = 150; // ms
+
+  function handleMouseEnter() {
+    if (closeTimer.current) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setOpen(true);
+  }
+
+  function handleMouseLeave() {
+    closeTimer.current = window.setTimeout(() => {
+      setOpen(false);
+    }, HOVER_CLOSE_DELAY);
+  }
 
   // Mock data for Namaste codes
   const namasteCodesData = [
@@ -79,6 +103,8 @@ export function NamasteCodes() {
     }
   };
 
+
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -120,11 +146,39 @@ export function NamasteCodes() {
           </motion.div>
 
           {/* Category Select */}
-          <AnimatedDropdown
+          {/* <AnimatedDropdown
             options={categories}
             selected={selectedCategory}
             onSelect={(val) => setSelectedCategory(val)}
-          />
+          /> */}
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              className="px-4 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
+            >
+              {selectedCategory}
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent
+              className="min-w-[180px] bg-white border rounded-md shadow-lg p-2"
+            >
+              <DropdownMenuLabel className="px-2 py-1 text-gray-700 font-medium">
+                Categories
+              </DropdownMenuLabel>
+
+              <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
+
+              {categories.map((cat) => (
+                <DropdownMenuItem
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-3 py-2 rounded-md text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-600 ${cat === selectedCategory ? "bg-blue-100 text-blue-700 font-semibold" : "text-gray-700"
+                    }`}
+                >
+                  {cat}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
 
 
 
