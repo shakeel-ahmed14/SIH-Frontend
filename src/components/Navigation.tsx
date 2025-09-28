@@ -127,10 +127,10 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
         style={{ minWidth: 64 }} // ensure minimum so layout doesn't collapse
       >
         {/* Logo + toggle */}
-        <div className="flex items-center justify-center h-20 px-4 border-b border-slate-200 bg-white">
+        <div className="flex items-center h-20 px-4 border-b border-slate-200 bg-white">
           {open ? (
-            <div className="flex items-center justify-center w-full">
-              <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center space-x-3">
                 <img
                   src={pancakeLogo}
                   alt="AyushVardhan logo"
@@ -143,6 +143,13 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
                   AyushVardhan Console
                 </motion.span>
               </div>
+              <button
+                aria-label="Collapse sidebar"
+                onClick={() => setOpen(false)}
+                className="p-1 rounded-lg hover:bg-slate-100 text-slate-500 flex-shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
           ) : (
             <button
