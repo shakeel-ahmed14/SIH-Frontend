@@ -48,27 +48,35 @@ export default function App() {
 
   return (
     <>
-      <div className="min-h-screen flex bg-[#2e392e] text-foreground antialiased">
-        {currentPage !== "landing" && (
-          <Navigation
-            currentPage={currentPage}
-            onPageChange={setCurrentPage}
-            onToggle={setSidebarOpen} // track sidebar state
-          />
-        )}
-        <main
-          className={
-            currentPage !== "landing"
-              ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? "container max-w-full m-5" : "w-full m-5"
-              } m-2 rounded-lg bg-white`
-              : "flex-1 min-h-scree"
-          }
-        >
-          {renderCurrentPage()}
-        </main>
+      <div className="relative min-h-screen flex text-foreground antialiased">
+        {/* Blurred background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center filter blur-md z-0"
+          style={{ backgroundImage: "url('/morning-scenery-wallpaper-1920x1200_6.jpg')" }}
+        ></div>
 
+        {/* Content */}
+        <div className="relative z-10 flex w-full">
+          {currentPage !== "landing" && (
+            <Navigation
+              currentPage={currentPage}
+              onPageChange={setCurrentPage}
+              onToggle={setSidebarOpen}
+            />
+          )}
 
+          <main
+            className={
+              currentPage !== "landing"
+                ? `px-4 py-8 transition-all duration-300 ${sidebarOpen ? "container max-w-full m-5" : "w-full m-5"} m-2 rounded-lg bg-[#eefae8]/70`
+                : "flex-1 min-h-screen"
+            }
+          >
+            {renderCurrentPage()}
+          </main>
+        </div>
       </div>
+
     </>
   );
 

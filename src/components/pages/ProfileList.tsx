@@ -6,6 +6,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../ui/badge';
 import { Textarea } from '../ui/textarea';
 import { Search, Filter, Plus, Eye, Edit, FileText, Calendar, User } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
 
 export function ProfileList() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -73,8 +81,8 @@ export function ProfileList() {
 
   const filteredPatients = patientsData.filter(patient => {
     const matchesSearch = patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         patient.patientId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         patient.diagnoses.some(d => d.toLowerCase().includes(searchTerm.toLowerCase()));
+      patient.patientId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      patient.diagnoses.some(d => d.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesStatus = selectedStatus === 'all' || patient.status === selectedStatus;
     return matchesSearch && matchesStatus;
   });
@@ -123,18 +131,41 @@ export function ProfileList() {
                 className="pl-10"
               />
             </div>
+
             <div className="flex space-x-2">
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-3 py-2 border border-border rounded-md bg-background text-foreground"
-              >
-                {statuses.map(status => (
-                  <option key={status} value={status}>
-                    {status === 'all' ? 'All Statuses' : status}
-                  </option>
-                ))}
-              </select>
+              {/* Dropdown Menu replacing the select */}
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className="px-4 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
+                >
+                  {selectedStatus === 'all' ? 'All Statuses' : selectedStatus}
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent
+                  className="min-w-[180px] bg-white border rounded-md shadow-lg p-2"
+                >
+                  <DropdownMenuLabel className="px-2 py-1 text-gray-700 font-medium">
+                    Categories
+                  </DropdownMenuLabel>
+
+                  <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
+
+                  {statuses.map((status) => (
+                    <DropdownMenuItem
+                      key={status}
+                      onClick={() => setSelectedStatus(status)}
+                      className={`px-3 py-2 rounded-md text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-600 ${status === selectedStatus
+                          ? "bg-blue-100 text-blue-700 font-semibold"
+                          : "text-gray-700"
+                        }`}
+                    >
+                      {status === 'all' ? 'All Statuses' : status}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* More Filters Button */}
               <Button variant="outline" className="flex items-center space-x-2">
                 <Filter className="w-4 h-4" />
                 <span>More Filters</span>
@@ -144,10 +175,11 @@ export function ProfileList() {
         </CardContent>
       </Card>
 
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
-          <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
+          <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Total Patients</p>
               <p className="text-2xl font-bold">1,456</p>
@@ -155,7 +187,7 @@ export function ProfileList() {
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
+          <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Active Cases</p>
               <p className="text-2xl font-bold text-green-600">892</p>
@@ -163,7 +195,7 @@ export function ProfileList() {
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
+          <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Under Care</p>
               <p className="text-2xl font-bold text-blue-600">234</p>
@@ -171,7 +203,7 @@ export function ProfileList() {
           </CardContent>
         </Card>
         <Card>
-          <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
+          <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Total Notes</p>
               <p className="text-2xl font-bold text-purple-600">3,247</p>
@@ -278,8 +310,8 @@ export function ProfileList() {
                         <Button variant="ghost" size="sm">
                           <Edit className="w-4 h-4" />
                         </Button>
-                        <Button 
-                          variant="ghost" 
+                        <Button
+                          variant="ghost"
                           size="sm"
                           onClick={() => handleAddNote(patient)}
                         >
@@ -305,15 +337,15 @@ export function ProfileList() {
             <CardContent className="space-y-4">
               <div>
                 <label className="text-sm font-medium">Clinical Note</label>
-                <Textarea 
+                <Textarea
                   placeholder="Enter clinical note..."
                   rows={4}
                   className="mt-1"
                 />
               </div>
               <div className="flex justify-end space-x-2">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => setShowNoteDialog(false)}
                 >
                   Cancel

@@ -51,7 +51,7 @@
     pointer-events: none;
 
     /* Scale up background */
-    transform: scale(1.3);   /* increase number to make waves bigger */
+    transform: scale(2);   /* increase number to make waves bigger */
     transform-origin: center;
   }
 

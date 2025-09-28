@@ -6,11 +6,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../ui/badge';
 import { Search, Filter, Plus, Eye, Edit, ExternalLink } from 'lucide-react';
 import { motion } from "framer-motion";
-import { AnimatedDropdown } from '../ui/AnimatedDropdown';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu"
 
 export function TM2Codes() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedChapter, setSelectedChapter] = useState('all');
+  const [selectedChapter, setSelectedChapter] = useState('All Categories');
 
   // Mock data for TM2/ICD-11 codes
   const tm2CodesData = [
@@ -67,7 +74,7 @@ export function TM2Codes() {
   ];
 
   const chapters = [
-    'all',
+    'All Categories',
     'Mental, behavioural or neurodevelopmental disorders',
     'Diseases of the circulatory system',
     'Endocrine, nutritional or metabolic diseases',
@@ -78,7 +85,7 @@ export function TM2Codes() {
   const filteredCodes = tm2CodesData.filter(code => {
     const matchesSearch = code.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
       code.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesChapter = selectedChapter === 'all' || code.chapter === selectedChapter;
+    const matchesChapter = selectedChapter === 'All Categories' || code.chapter === selectedChapter;
     return matchesSearch && matchesChapter;
   });
 
@@ -141,158 +148,172 @@ export function TM2Codes() {
               />
             </motion.div>
             {/* Chapter dropdown (custom animated) */}
-            <motion.div
-              className="flex space-x-2 items-start"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <AnimatedDropdown
-                options={['All Chapters', ...chapters.slice(1)]}
-                selected={selectedChapter === 'all' ? 'All Chapters' : selectedChapter}
-                onSelect={(value) => {
-                  setSelectedChapter(value === 'All Chapters' ? 'all' : value);
-                }}
-              />
-
-              {/* More Filters Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 300, delay: 0.08 }}
+            <DropdownMenu>
+              <DropdownMenuTrigger
+                className="px-4 py-2 bg-white border rounded-md shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-green-400"
               >
-                {/* wrap Button in motion.div so Button props/variants are preserved */}
-                <div className="inline-block">
-                  <Button variant="outline" className="flex items-center space-x-2">
-                    <Filter className="w-4 h-4" />
-                    <span>More Filters</span>
-                  </Button>
-                </div>
-              </motion.div>
-            </motion.div>
+                {selectedChapter}
+              </DropdownMenuTrigger>
 
-          </div>
-        </CardContent>
-      </Card>
+              <DropdownMenuContent
+                className="min-w-[180px] bg-white border rounded-md shadow-lg p-2"
+              >
+                <DropdownMenuLabel className="px-2 py-1 text-gray-700 font-medium">
+                  Categories
+                </DropdownMenuLabel>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {[
-          { label: "Total ICD-11 Codes", value: "8,652", color: "text-foreground" },
-          { label: "TM2 Codes", value: "1,234", color: "text-purple-600" },
-          { label: "Current Version", value: "7,890", color: "text-green-600" },
-          { label: "Mapped to Namaste", value: "6,234", color: "text-blue-600" },
-        ].map((stat, index) => (
-          <motion.div
-            key={index}
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              show: { opacity: 1, y: 0 }
-            }}
-            whileHover={{ scale: 1.04 }}
-            transition={{ duration: 0.3 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <Card>
-              <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
-                <div className="space-y-2">
-                  <p className="text-sm text-muted-foreground">{stat.label}</p>
-                  <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
-                </div>
-              </CardContent>
-            </Card>
+                <DropdownMenuSeparator className="my-1 h-px bg-gray-200" />
+
+                {chapters.map((cat) => (
+                  <DropdownMenuItem
+                    key={cat}
+                    onClick={() => setSelectedChapter(cat)}
+                    className={`px-3 py-2 rounded-md text-sm cursor-pointer hover:bg-blue-50 hover:text-blue-600 ${cat === selectedChapter ? "bg-blue-100 text-blue-700 font-semibold" : "text-gray-700"
+                      }`}
+                  >
+                    {cat}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* More Filters Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 300, delay: 0.08 }}
+            >
+              {/* wrap Button in motion.div so Button props/variants are preserved */}
+              <div className="inline-block">
+                <Button variant="outline" className="flex items-center space-x-2">
+                  <Filter className="w-4 h-4" />
+                  <span>More Filters</span>
+                </Button>
+              </div>
           </motion.div>
-        ))}
-      </div>
 
-      {/* Version Info */}
+        </div>
+      </CardContent>
+    </Card>
+
+      {/* Stats Cards */ }
+  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+    {[
+      { label: "Total ICD-11 Codes", value: "8,652", color: "text-foreground" },
+      { label: "TM2 Codes", value: "1,234", color: "text-purple-600" },
+      { label: "Current Version", value: "7,890", color: "text-green-600" },
+      { label: "Mapped to Namaste", value: "6,234", color: "text-blue-600" },
+    ].map((stat, index) => (
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
+        key={index}
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          show: { opacity: 1, y: 0 }
+        }}
+        whileHover={{ scale: 1.04 }}
+        transition={{ duration: 0.3 }}
+        whileTap={{ scale: 0.97 }}
       >
         <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <div className="space-y-1">
-                <p className="font-medium">Current ICD-11 Version</p>
-                <p className="text-sm text-muted-foreground">ICD-11 for Mortality and Morbidity Statistics (Version 2024)</p>
-              </div>
-              <Badge className="bg-blue-100 text-blue-800">Latest</Badge>
+          <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground">{stat.label}</p>
+              <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>
             </div>
           </CardContent>
         </Card>
       </motion.div>
+    ))}
+  </div>
 
-      {/* Codes Table */}
-      <Card>
-        <CardHeader>
-          <CardTitle>ICD-11 Codes ({filteredCodes.length} results)</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Code</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Chapter</TableHead>
-                  <TableHead>Parent</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Mappings</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredCodes.map((code, index) => (
-                  <motion.tr
-                    key={code.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2, delay: index * 0.05 }}
-                  >
-                    <TableCell className="font-mono">{code.code}</TableCell>
-                    <TableCell className="max-w-md">
-                      <div className="truncate" title={code.title}>
-                        {code.title}
-                      </div>
-                    </TableCell>
-                    <TableCell className="max-w-xs">
-                      <div className="truncate" title={code.chapter}>
-                        {code.chapter}
-                      </div>
-                    </TableCell>
-                    <TableCell className="font-mono">{code.parent}</TableCell>
-                    <TableCell>
-                      <Badge className={getStatusColor(code.status)}>
-                        {code.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{code.mappings}</Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex space-x-2">
-                        <Button variant="ghost" size="sm">
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="sm">
-                          <ExternalLink className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </motion.tr>
-                ))}
-              </TableBody>
-            </Table>
+  {/* Version Info */ }
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.4 }}
+  >
+    <Card>
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <p className="font-medium">Current ICD-11 Version</p>
+            <p className="text-sm text-muted-foreground">ICD-11 for Mortality and Morbidity Statistics (Version 2024)</p>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+          <Badge className="bg-blue-100 text-blue-800">Latest</Badge>
+        </div>
+      </CardContent>
+    </Card>
+  </motion.div>
+
+  {/* Codes Table */ }
+  <Card>
+    <CardHeader>
+      <CardTitle>ICD-11 Codes ({filteredCodes.length} results)</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Code</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Chapter</TableHead>
+              <TableHead>Parent</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Mappings</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredCodes.map((code, index) => (
+              <motion.tr
+                key={code.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.2, delay: index * 0.05 }}
+              >
+                <TableCell className="font-mono">{code.code}</TableCell>
+                <TableCell className="max-w-md">
+                  <div className="truncate" title={code.title}>
+                    {code.title}
+                  </div>
+                </TableCell>
+                <TableCell className="max-w-xs">
+                  <div className="truncate" title={code.chapter}>
+                    {code.chapter}
+                  </div>
+                </TableCell>
+                <TableCell className="font-mono">{code.parent}</TableCell>
+                <TableCell>
+                  <Badge className={getStatusColor(code.status)}>
+                    {code.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge variant="outline">{code.mappings}</Badge>
+                </TableCell>
+                <TableCell>
+                  <div className="flex space-x-2">
+                    <Button variant="ghost" size="sm">
+                      <Eye className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      <ExternalLink className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </motion.tr>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </CardContent>
+  </Card>
+    </div >
   );
 }

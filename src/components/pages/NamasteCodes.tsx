@@ -216,7 +216,7 @@ export function NamasteCodes() {
             whileTap={{ scale: 0.97 }}
           >
             <Card>
-              <CardContent className="p-4 bg-[#e8f5ea] rounded-xl">
+              <CardContent className="p-4 bg-[#d2edd9] rounded-xl">
                 <div className="space-y-2">
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                   <p className={`text-2xl font-bold ${stat.color}`}>{stat.value}</p>

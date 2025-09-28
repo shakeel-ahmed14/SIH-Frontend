@@ -118,7 +118,7 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
 
       {/* Left vertical bar for md+ (collapsible) */}
       <motion.aside
-        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden bg-white m-5 mr-0 rounded-lg"
+        className="hidden md:flex flex-col top-0 left-0 h-auto z-40 ease-in-out bg-base-100 overflow-hidden bg-[#7ebc81]/70 m-5 mr-0 rounded-lg"
         initial={false}
         animate={open ? "open" : "closed"}
         variants={sidebarVariants}
@@ -134,7 +134,7 @@ export function Navigation({ currentPage = "home", onPageChange, onToggle }: Sid
                 variants={logoTextVariants}
                 aria-hidden={!open}
               >
-                {open ? "🌿Ayush Vardhan" : ""}
+                {open ? "🌿AyushVardhan" : ""}
               </motion.span>
             </div>
           </div>
